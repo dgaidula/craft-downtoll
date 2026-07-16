@@ -9,6 +9,9 @@
 
 ### Added
 - Initial release: configurable embedded gated lead-gen forms.
+- **Configurable CP name** (Settings → General → Plugin name, or `config/downtoll.php`)
+  — relabel the plugin in the sidebar, Plugins screen, and settings. Blank = "Downtoll".
+  For a seamless rename where editors keep the name they already know.
 - **Lite / Pro editions.** Lite is a complete product — gate a file, capture the lead,
   get emailed. Pro adds the integration surface: `EVENT_AFTER_SUBMISSION`, the webhook,
   `data()` headless mode, multi-list opt-in + `triggersHook` routing, and the district

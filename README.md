@@ -50,9 +50,26 @@ including the shipped webhook — runs; leads reach you by email instead.
   catalog**. Stored in the plugin's own DB table (content) → editable on prod,
   manageable by editors with the *Manage gated form configuration* permission.
 - **Settings** (project config; dev-owned, locked on prod) → tabbed
-  *General / Integrations / Advanced*: default success mode, lead notifications,
-  reCAPTCHA + webhook config (literal or `$ENV_VAR`), district-lookup endpoint,
-  download-link TTL.
+  *General / Integrations / Advanced*: plugin name, default success mode, lead
+  notifications, reCAPTCHA + webhook config (literal or `$ENV_VAR`), district-lookup
+  endpoint, download-link TTL.
+
+### Rename it in the control panel
+
+Downtoll can present under any name you like — the sidebar nav, the Plugins screen,
+and the settings breadcrumb all follow **Settings → General → Plugin name** (blank =
+"Downtoll"). Set it in `config/downtoll.php` so it holds with `allowAdminChanges` off:
+
+```php
+// config/downtoll.php
+return [
+    'pluginName' => 'Gated Content',
+];
+```
+
+This exists for a seamless rename: if editors have always known this feature by
+another name, keep that label so the internal package name is never something they
+have to notice.
 
 ### Lead notifications
 

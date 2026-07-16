@@ -17,6 +17,17 @@ class Settings extends Model
 {
     // --- General ---
 
+    /**
+     * Overrides the plugin's name in the CP — the sidebar nav item, the Plugins
+     * screen, and the settings breadcrumb. Blank = "Downtoll".
+     *
+     * Its purpose is a seamless rename: a site that has always called this feature
+     * something else (e.g. "Gated Content") can keep that label so editors never see
+     * the internal package name change. Set it in the site's `config/downtoll.php`
+     * so it is version-controlled and survives with allowAdminChanges off.
+     */
+    public string $pluginName = '';
+
     /** Default per-resource success UX: 'swap' (AJAX download button) or 'reload'. */
     public string $defaultSuccessMode = 'swap';
 

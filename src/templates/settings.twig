@@ -12,6 +12,16 @@
 
 {% block content %}
 <div id="gc-general">
+    {{ forms.autosuggestField({
+        label: 'Plugin name'|t('downtoll'),
+        instructions: 'What this plugin is called in the control panel (sidebar, Plugins screen, settings). Leave blank for “Downtoll”. Best set in config/downtoll.php so it holds with admin changes off.'|t('downtoll'),
+        id: 'pluginName',
+        name: 'pluginName',
+        suggestEnvVars: true,
+        placeholder: 'Downtoll',
+        value: settings.pluginName,
+    }) }}
+
     {{ forms.selectField({
         label: 'Default success behavior'|t('downtoll'),
         instructions: 'Per-entry fields can override this.'|t('downtoll'),

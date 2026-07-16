@@ -83,6 +83,14 @@ class Plugin extends BasePlugin
     {
         parent::init();
 
+        // Optional rename: let a site relabel the plugin in the CP (Plugins screen,
+        // settings breadcrumb, and — via getCpNavItem — the sidebar). Blank keeps
+        // "Downtoll". Guarded so a partially-constructed settings model can't blank it.
+        $name = $this->getSettings()->pluginName ?? '';
+        if ($name !== '') {
+            $this->name = $name;
+        }
+
         $this->registerFieldType();
         $this->registerRoutes();
         $this->registerPermissions();
@@ -104,7 +112,9 @@ class Plugin extends BasePlugin
     public function getCpNavItem(): ?array
     {
         $item = parent::getCpNavItem();
-        $item['label'] = Craft::t('downtoll', 'Downtoll');
+        // parent already uses $this->name (set from the pluginName override in init());
+        // fall back to "Downtoll" if it somehow came through empty.
+        $item['label'] = $this->name ?: Craft::t('downtoll', 'Downtoll');
         // Bundled Font Awesome solid icon. Alternatives: torii-gate, lock-keyhole, shield-halved, vault.
         $item['icon'] = 'fence';
         return $item;
