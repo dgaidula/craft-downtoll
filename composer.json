@@ -1,7 +1,6 @@
 {
   "name": "dgaidula/craft-downtoll",
   "description": "Gated downloads and lead capture for Craft CMS.",
-  "version": "1.0.0",
   "type": "craft-plugin",
   "license": "proprietary",
   "support": {

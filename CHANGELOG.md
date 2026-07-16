@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 - Unreleased
+## 1.0.0 - 2026-07-16
 
 > Renamed from **Gated Content** (`iceboxind/craft-gated-content`) to **Downtoll**
 > (`dgaidula/craft-downtoll`) before release. Nothing shipped under the old name, so
