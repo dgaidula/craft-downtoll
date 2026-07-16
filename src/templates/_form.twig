@@ -1,0 +1,108 @@
+{#
+  Downtoll — embedded lead-gen form.
+  Rendered via:  {{ craft.downtoll.render(entry.myGatedField) }}
+  Expects `config` (an enriched ResourceConfig from the field value).
+
+  In 'reload' mode, wrap the protected markup in {% block downtollRevealed %}…{% endblock %}
+  in the calling template; it is revealed here once access is granted.
+#}
+{% set gc = craft.downtoll %}
+{% set req = config.requiredFields %}
+
+{% if config.successMode == 'reload' and gc.hasAccess(config) %}
+    <div class="c-block-gated-form c-block-gated-form--unlocked{{ config.cssClass ? ' ' ~ config.cssClass }}" data-gc-unlocked>
+        {% if config.assetId %}
+            <a class="c-block-gated-form--download" href="{{ gc.downloadUrl(config) }}">Download now</a>
+        {% endif %}
+        {{ block('downtollRevealed') is defined ? block('downtollRevealed') }}
+    </div>
+{% else %}
+    <div class="c-block-gated-form{{ config.cssClass ? ' ' ~ config.cssClass }}"
+         data-mode="{{ config.successMode }}"
+         data-endpoint="{{ actionUrl('downtoll/submit') }}">
+
+        <form class="c-block-gated-form--form" method="post" novalidate>
+            <input type="hidden" name="_gcConfig" value="{{ gc.token(config) }}">
+
+            <input type="hidden" name="{{ gc.recaptchaFieldName }}" class="c-block-gated-form--recaptcha"
+                   data-parameter="{{ gc.recaptchaSiteKey }}">
+
+            <div class="c-block-gated-form--field">
+                <label for="gc-email">Email address{% if 'email' in req %} <span class="c-block-gated-form--required" aria-hidden="true">*</span>{% endif %}</label>
+                <input id="gc-email" type="email" name="email"{{ 'email' in req ? ' required' }}>
+            </div>
+            <div class="c-block-gated-form--field">
+                <label for="gc-first">First name{% if 'first-name' in req %} <span class="c-block-gated-form--required" aria-hidden="true">*</span>{% endif %}</label>
+                <input id="gc-first" type="text" name="first-name"{{ 'first-name' in req ? ' required' }}>
+            </div>
+            <div class="c-block-gated-form--field">
+                <label for="gc-last">Last name{% if 'last-name' in req %} <span class="c-block-gated-form--required" aria-hidden="true">*</span>{% endif %}</label>
+                <input id="gc-last" type="text" name="last-name"{{ 'last-name' in req ? ' required' }}>
+            </div>
+
+            <div class="c-block-gated-form--field">
+                <label for="gc-state">US State{% if 'state' in req %} <span class="c-block-gated-form--required" aria-hidden="true">*</span>{% endif %}</label>
+                <select id="gc-state" name="state"{{ 'state' in req ? ' required' }}>
+                    <option value="">— Select —</option>
+                    {% for abbr, name in gc.usStates %}
+                        <option value="{{ abbr }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if config.includeAffiliation %}
+                <div class="c-block-gated-form--field c-block-gated-form--affiliation">
+                    <label for="gc-aff">I’m a…</label>
+                    <select id="gc-aff" name="affiliation">
+                        <option value="">— Select —</option>
+                        {% for opt in config.affiliationOptions %}
+                            <option value="{{ opt.value }}"
+                                    data-gc-trigger="{{ opt.triggersHook ? '1' : '0' }}">
+                                {{ opt.label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="c-block-gated-form--field c-block-gated-form--district m-hide" data-gc-district>
+                    <label for="gc-district">Find your school district</label>
+                    {# Typeahead endpoint comes from the plugin settings (env-aware). When it is
+                       not configured the attribute is omitted and this degrades to a plain text
+                       input, which still submits as `School District Input`. #}
+                    <input id="gc-district" type="text" name="school-district-input" autocomplete="off"
+                           {%- if gc.districtLookupEndpoint %} data-lookup-endpoint="{{ gc.districtLookupEndpoint }}"{% endif %}>
+                    <input type="hidden" name="district-id">
+                    <ul class="c-block-gated-form--district-results" role="listbox"></ul>
+                </div>
+            {% endif %}
+
+            {% if config.includeNewsletter and config.newsletterLists %}
+                <fieldset class="c-block-gated-form--field c-block-gated-form--newsletter">
+                    {% if config.newsletterHeading %}
+                        <legend>{{ config.newsletterHeading }}</legend>
+                    {% endif %}
+                    {% for list in config.newsletterLists %}
+                        <label class="c-block-gated-form--checkbox">
+                            <input type="checkbox" name="newsletter-subscribe[]" value="{{ list.listId }}">
+                            {{ list.label|raw }}
+                        </label>
+                    {% endfor %}
+                </fieldset>
+            {% endif %}
+
+            <div class="c-block-gated-form--submit">
+                <button type="submit">Get access</button>
+            </div>
+        </form>
+
+        <div class="c-block-gated-form--message m-success" hidden>
+            {% if config.successMessage %}
+                <div class="c-block-gated-form--message-text">{{ config.successMessage|raw }}</div>
+            {% endif %}
+            <a class="c-block-gated-form--download" href="#" data-gc-download>Download now</a>
+        </div>
+        <div class="c-block-gated-form--message m-failure" hidden>
+            <div class="c-block-gated-form--message-text">{{ config.errorMessage|raw }}</div>
+        </div>
+    </div>
+{% endif %}

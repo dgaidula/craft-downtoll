@@ -1,0 +1,75 @@
+{% extends '_layouts/cp' %}
+{% import '_includes/forms' as forms %}
+
+{% set title = 'Downtoll'|t('downtoll') %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <input type="hidden" name="action" value="downtoll/config/save">
+    {{ redirectInput('downtoll') }}
+
+    <h2>{{ 'Affiliation options'|t('downtoll') }}</h2>
+    {{ forms.editableTable({
+        instructions: 'The “I’m a…” choices. “Triggers hook” arms an option to fire a front-end hook your site JS can react to (e.g. reveal a conditional field).'|t('downtoll'),
+        id: 'affiliations',
+        name: 'affiliations',
+        cols: {
+            label: { heading: 'Label (shown to visitor)'|t('downtoll'), type: 'singleline', width: '45%' },
+            value: { heading: 'Integration value'|t('downtoll'), type: 'singleline', width: '40%' },
+            triggersHook: { heading: 'Triggers hook'|t('downtoll'), type: 'checkbox', width: '15%' },
+        },
+        rows: affiliations,
+        addRowLabel: 'Add an affiliation'|t('downtoll'),
+        allowAdd: true,
+        allowDelete: true,
+        allowReorder: true,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Newsletter lists'|t('downtoll') }}</h2>
+    {{ forms.editableTable({
+        instructions: 'The opt-in checkboxes offered per gated entry. “List ID” is the identifier sent to your integration (e.g. a CampaignMonitor list ID); it may be an `$ENV_VAR` reference (resolved server-side, so the real ID never ships in page HTML). “Triggers hook” marks the box as a routing MODIFIER: it fires the submission hook (so a site listener can classify or re-route) and, on its own, does not count as a plain newsletter opt-in.'|t('downtoll'),
+        id: 'newsletterLists',
+        name: 'newsletterLists',
+        cols: {
+            label: { heading: 'Label'|t('downtoll'), type: 'singleline', width: '50%' },
+            listId: { heading: 'List ID (literal or $ENV_VAR)'|t('downtoll'), type: 'singleline', width: '35%' },
+            triggersHook: { heading: 'Triggers hook'|t('downtoll'), type: 'checkbox', width: '15%' },
+        },
+        rows: newsletterLists,
+        addRowLabel: 'Add a list'|t('downtoll'),
+        allowAdd: true,
+        allowDelete: true,
+        allowReorder: true,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Import / export'|t('downtoll') }}</h2>
+    <p class="light">{{ 'Copy this configuration between environments.'|t('downtoll') }}</p>
+
+    <div class="flex" style="align-items: flex-start;">
+        <div class="flex-grow">
+            <h3>{{ 'Export'|t('downtoll') }}</h3>
+            <p class="light">{{ 'Download both tables as a single CSV.'|t('downtoll') }}</p>
+            <a href="{{ actionUrl('downtoll/config/export') }}" class="btn">{{ 'Export CSV'|t('downtoll') }}</a>
+        </div>
+
+        <div class="flex-grow">
+            <h3>{{ 'Import'|t('downtoll') }}</h3>
+            <p class="light">{{ 'REPLACES all current configuration with the uploaded file.'|t('downtoll') }}</p>
+            {# The file input lives in the page form; the Import button overrides the #}
+            {# form action + encoding so it posts the file to the import action. #}
+            <input type="file" name="configFile" accept=".csv,text/csv">
+            <button
+                type="submit"
+                class="btn submit"
+                formaction="{{ actionUrl('downtoll/config/import') }}"
+                formenctype="multipart/form-data"
+                formmethod="post"
+                onclick="return confirm('{{ 'This REPLACES all current Downtoll configuration with the uploaded CSV. Continue?'|t('downtoll')|e('js') }}');"
+            >{{ 'Import CSV (replace all)'|t('downtoll') }}</button>
+        </div>
+    </div>
+{% endblock %}

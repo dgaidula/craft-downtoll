@@ -1,0 +1,155 @@
+{% import '_includes/forms' as forms %}
+
+{# Retour-style tabbed settings. NOTE: all of this is project config — read-only
+   on prod when allowAdminChanges is off (by design; dev-owned). Editor-facing
+   form structure lives in the Downtoll CP section instead. #}
+
+{% set tabs = {
+    general:      { label: 'General'|t('downtoll'),      url: '#gc-general' },
+    integrations: { label: 'Integrations'|t('downtoll'), url: '#gc-integrations' },
+    advanced:     { label: 'Advanced'|t('downtoll'),     url: '#gc-advanced' },
+} %}
+
+{% block content %}
+<div id="gc-general">
+    {{ forms.selectField({
+        label: 'Default success behavior'|t('downtoll'),
+        instructions: 'Per-entry fields can override this.'|t('downtoll'),
+        id: 'defaultSuccessMode',
+        name: 'defaultSuccessMode',
+        options: [
+            { label: 'Swap form for a download button'|t('downtoll'), value: 'swap' },
+            { label: 'Reload to reveal content in place'|t('downtoll'), value: 'reload' },
+        ],
+        value: settings.defaultSuccessMode,
+    }) }}
+
+    {{ forms.textField({
+        label: 'Newsletter heading'|t('downtoll'),
+        instructions: 'Shown above the newsletter checkboxes. Use {site} for the current site name.'|t('downtoll'),
+        id: 'newsletterHeading',
+        name: 'newsletterHeading',
+        value: settings.newsletterHeading,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Lead notifications'|t('downtoll') }}</h2>
+    <p class="light">{{ 'Email each captured lead to a human. Without this — and without a Pro integration listener — a submission is gated, served, and then gone.'|t('downtoll') }}</p>
+    {{ forms.lightswitchField({
+        label: 'Email me each lead'|t('downtoll'),
+        id: 'notifyEnabled',
+        name: 'notifyEnabled',
+        on: settings.notifyEnabled,
+    }) }}
+    {{ forms.autosuggestField({
+        label: 'Recipients'|t('downtoll'),
+        instructions: 'Comma-separated. Literal addresses or an $ENVIRONMENT_VARIABLE (resolved server-side).'|t('downtoll'),
+        id: 'notifyRecipients',
+        name: 'notifyRecipients',
+        suggestEnvVars: true,
+        value: settings.notifyRecipients,
+        errors: settings.getErrors('notifyRecipients'),
+    }) }}
+    {{ forms.textField({
+        label: 'Subject'|t('downtoll'),
+        instructions: 'Use {download} for the gated file’s name and {site} for the site name.'|t('downtoll'),
+        id: 'notifySubject',
+        name: 'notifySubject',
+        value: settings.notifySubject,
+    }) }}
+    {{ forms.autosuggestField({
+        label: 'From address'|t('downtoll'),
+        instructions: 'Optional. Blank uses Craft’s system From — set this if that isn’t configured, since an empty From makes the mailer reject the message.'|t('downtoll'),
+        id: 'notifyFrom',
+        name: 'notifyFrom',
+        suggestEnvVars: true,
+        value: settings.notifyFrom,
+    }) }}
+</div>
+
+<div id="gc-integrations" class="hidden">
+    <h2>{{ 'reCAPTCHA v3'|t('downtoll') }}</h2>
+    {{ forms.autosuggestField({
+        label: 'Secret key'|t('downtoll'),
+        instructions: 'Literal value or an $ENVIRONMENT_VARIABLE. Empty disables server-side verification.'|t('downtoll'),
+        id: 'recaptchaSecret',
+        name: 'recaptchaSecret',
+        suggestEnvVars: true,
+        value: settings.recaptchaSecret,
+    }) }}
+    {{ forms.autosuggestField({
+        label: 'Site key'|t('downtoll'),
+        id: 'recaptchaSiteKey',
+        name: 'recaptchaSiteKey',
+        suggestEnvVars: true,
+        value: settings.recaptchaSiteKey,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Submission webhook'|t('downtoll') }}</h2>
+    <p class="light">{{ 'The shipped, integration-agnostic hook. CRM-specific logic (e.g. Salesforce) is added as a site-side listener.'|t('downtoll') }}</p>
+    {{ forms.lightswitchField({
+        label: 'Enable webhook'|t('downtoll'),
+        id: 'webhookEnabled',
+        name: 'webhookEnabled',
+        on: settings.webhookEnabled,
+    }) }}
+    {{ forms.autosuggestField({
+        label: 'Webhook URL'|t('downtoll'),
+        id: 'webhookUrl',
+        name: 'webhookUrl',
+        suggestEnvVars: true,
+        value: settings.webhookUrl,
+        errors: settings.getErrors('webhookUrl'),
+    }) }}
+    {{ forms.autosuggestField({
+        label: 'Signing secret'|t('downtoll'),
+        instructions: 'Optional. If set, payloads are sent with an HMAC-SHA256 X-Downtoll-Signature header.'|t('downtoll'),
+        id: 'webhookSecret',
+        name: 'webhookSecret',
+        suggestEnvVars: true,
+        value: settings.webhookSecret,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'District lookup'|t('downtoll') }}</h2>
+    <p class="light">{{ 'Only used by the shipped form. The plugin ships no typeahead JS — your front end queries this endpoint.'|t('downtoll') }}</p>
+    {{ forms.autosuggestField({
+        label: 'Lookup endpoint'|t('downtoll'),
+        instructions: 'Literal value or an $ENVIRONMENT_VARIABLE, resolved server-side. Leave empty to disable the typeahead — the district input then submits as plain text.'|t('downtoll'),
+        id: 'districtLookupEndpoint',
+        name: 'districtLookupEndpoint',
+        suggestEnvVars: true,
+        value: settings.districtLookupEndpoint,
+    }) }}
+</div>
+
+<div id="gc-advanced" class="hidden">
+    {{ forms.textField({
+        label: 'reCAPTCHA field name'|t('downtoll'),
+        instructions: 'Form field the token submits under. Defaults to the standard “g-recaptcha-response”. Set a non-obvious value (e.g. “gc-token”) as an anti-bot measure.'|t('downtoll'),
+        id: 'recaptchaFieldName',
+        name: 'recaptchaFieldName',
+        value: settings.recaptchaFieldName,
+    }) }}
+
+    {{ forms.textField({
+        label: 'reCAPTCHA minimum score'|t('downtoll'),
+        id: 'recaptchaMinScore',
+        name: 'recaptchaMinScore',
+        size: 5,
+        value: settings.recaptchaMinScore,
+    }) }}
+    {{ forms.textField({
+        label: 'Download link lifetime (seconds)'|t('downtoll'),
+        instructions: 'How long a signed download URL stays valid.'|t('downtoll'),
+        id: 'downloadTtl',
+        name: 'downloadTtl',
+        size: 8,
+        value: settings.downloadTtl,
+    }) }}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{# Lead notification email (plain text).
+
+   Override by copying this to your own templates as
+   `downtoll/_mail/notification.twig` — site template roots win over the plugin's.
+
+   Vars: fields (normalized Title-Case payload), download (file name or null),
+         siteName, date.
+
+   Deliberately plain text: it forwards cleanly, it is readable in any client, and it
+   never breaks. The lead is data, not a marketing email.
+-#}
+{{ download ? 'Someone downloaded “' ~ download ~ '” on ' ~ siteName : 'New form submission on ' ~ siteName }}
+{{ date|date('F j, Y \\a\\t g:ia') }}
+
+{% set labels = {
+    'First Name': 'First name',
+    'Last Name': 'Last name',
+    'Email': 'Email',
+    'State': 'State',
+    'Affiliation': 'Affiliation',
+    'Other Affiliation': 'Other affiliation',
+    'School District Input': 'District',
+} %}
+{% for key, label in labels %}
+{%- if fields[key] is defined and fields[key] is not empty %}
+{{ label }}: {{ fields[key] }}
+{% endif -%}
+{% endfor %}
+{%- if fields['Newsletter Lists'] is defined and fields['Newsletter Lists'] is not empty %}
+Opted in to: {{ fields['Newsletter Lists']|join(', ') }}
+{% endif %}
+{#- Anything the map above doesn't cover, so a custom field never silently vanishes. -#}
+{% set known = labels|keys|merge(['Newsletter Lists', 'District Id']) %}
+{% set extras = fields|filter((v, k) => k not in known and v is not empty) %}
+{%- if extras|length %}
+
+Other fields:
+{% for key, value in extras %}
+{{ key }}: {{ value is iterable ? value|join(', ') : value }}
+{% endfor %}
+{%- endif %}
+
+--
+Sent by Downtoll. Turn this off in Settings → Downtoll → Notifications.

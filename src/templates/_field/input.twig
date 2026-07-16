@@ -1,0 +1,95 @@
+{% import '_includes/forms' as forms %}
+
+{# Per-entry gating config (CONTENT — editable on prod). #}
+
+{{ forms.elementSelectField({
+    label: 'Gated asset'|t('downtoll'),
+    instructions: 'The file released after a successful submission.'|t('downtoll'),
+    id: name ~ '-asset',
+    name: name ~ '[assetId]',
+    elementType: 'craft\\elements\\Asset',
+    limit: 1,
+    elements: asset ? [asset] : [],
+}) }}
+
+{{ forms.selectField({
+    label: 'Success behavior'|t('downtoll'),
+    id: name ~ '-successMode',
+    name: name ~ '[successMode]',
+    options: [
+        { label: 'Swap form for a download button'|t('downtoll'), value: 'swap' },
+        { label: 'Reload to reveal content in place'|t('downtoll'), value: 'reload' },
+    ],
+    value: value.successMode,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Include “I’m a…” affiliation field'|t('downtoll'),
+    id: name ~ '-includeAffiliation',
+    name: name ~ '[includeAffiliation]',
+    on: value.includeAffiliation,
+}) }}
+
+{{ forms.checkboxGroupField({
+    label: 'Required fields'|t('downtoll'),
+    instructions: 'Which standard fields are required. Required fields show a “*” and are validated client- and server-side.'|t('downtoll'),
+    id: name ~ '-requiredFields',
+    name: name ~ '[requiredFields]',
+    options: [
+        { label: 'First name'|t('downtoll'), value: 'first-name' },
+        { label: 'Last name'|t('downtoll'), value: 'last-name' },
+        { label: 'Email'|t('downtoll'), value: 'email' },
+        { label: 'US State'|t('downtoll'), value: 'state' },
+    ],
+    values: value.requiredFields,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Include newsletter opt-in'|t('downtoll'),
+    id: name ~ '-includeNewsletter',
+    name: name ~ '[includeNewsletter]',
+    on: value.includeNewsletter,
+}) }}
+
+{{ forms.checkboxGroupField({
+    label: 'Newsletter lists'|t('downtoll'),
+    instructions: 'Which lists this resource offers as opt-in checkboxes. Manage the catalog (and HTML labels) under the Downtoll section.'|t('downtoll'),
+    id: name ~ '-newsletterListIds',
+    name: name ~ '[newsletterListIds]',
+    options: listOptions,
+    values: value.newsletterListIds,
+}) }}
+
+{{ forms.textField({
+    label: 'Newsletter heading'|t('downtoll'),
+    instructions: 'Shown above the newsletter checkboxes. Supports the “{site}” token. Leave blank to hide it.'|t('downtoll'),
+    id: name ~ '-newsletterHeading',
+    name: name ~ '[newsletterHeading]',
+    value: value.newsletterHeading,
+}) }}
+
+{{ forms.textField({
+    label: 'Extra CSS class'|t('downtoll'),
+    instructions: 'Optional. Added to the form wrapper so you can target this form from your stylesheet (advanced).'|t('downtoll'),
+    id: name ~ '-cssClass',
+    name: name ~ '[cssClass]',
+    value: value.cssClass,
+}) }}
+
+{{ forms.textareaField({
+    label: 'Success message'|t('downtoll'),
+    instructions: 'Optional. Shown above the download button after a successful submission. HTML allowed (e.g. <h2>Thanks!</h2>).'|t('downtoll'),
+    id: name ~ '-successMessage',
+    name: name ~ '[successMessage]',
+    rows: 3,
+    value: value.successMessage,
+}) }}
+
+{{ forms.textareaField({
+    label: 'Error message'|t('downtoll'),
+    instructions: 'Optional. Shown if the submission fails. HTML allowed. Leave blank to use the plugin default.'|t('downtoll'),
+    id: name ~ '-errorMessage',
+    name: name ~ '[errorMessage]',
+    rows: 3,
+    value: value.errorMessage,
+}) }}
