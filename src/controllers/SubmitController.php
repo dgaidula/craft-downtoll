@@ -62,13 +62,23 @@ class SubmitController extends Controller
         // 5. Gate the resource for this session.
         $submissions->grantAccess($config);
 
-        // 6. Notify a human. Deliberately AFTER access is granted and never able to
+        // 6. Persist the lead as a Submission element (the CP index) — on BOTH
+        //    editions. Deliberately AFTER access is granted and never able to fail
+        //    the request: the visitor has already earned the download, so a storage
+        //    failure is logged, not thrown.
+        try {
+            $submissions->store($fields, $config, $event->downloadName);
+        } catch (\Throwable $e) {
+            Craft::error('Failed to store submission: ' . $e->getMessage(), 'downtoll');
+        }
+
+        // 7. Notify a human. Deliberately AFTER access is granted and never able to
         //    fail the request: the visitor has already earned the download, so a bad
         //    SMTP config must not cost them the file. Notifications::send() swallows
         //    and logs its own errors; this is available in Lite AND Pro.
         Plugin::getInstance()->notifications->send($event);
 
-        // 7. Respond per the editor's per-resource UX choice.
+        // 8. Respond per the editor's per-resource UX choice.
         if ($config->successMode === 'swap') {
             return $this->asJson([
                 'success'     => true,

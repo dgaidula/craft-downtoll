@@ -76,6 +76,20 @@
         suggestEnvVars: true,
         value: settings.notifyFrom,
     }) }}
+
+    <hr>
+
+    <h2>{{ 'Data retention'|t('downtoll') }}</h2>
+    <p class="light">{{ 'Stored submissions contain PII (names, emails). Set a retention window to auto-purge old leads instead of keeping them forever.'|t('downtoll') }}</p>
+    {{ forms.textField({
+        label: 'Delete submissions older than (days)'|t('downtoll'),
+        instructions: '0 keeps submissions forever. A positive number hard-deletes leads older than that many days (runs during Craft\'s garbage collection).'|t('downtoll'),
+        id: 'submissionRetentionDays',
+        name: 'submissionRetentionDays',
+        size: 6,
+        value: settings.submissionRetentionDays,
+        errors: settings.getErrors('submissionRetentionDays'),
+    }) }}
 </div>
 
 <div id="gc-integrations" class="hidden">

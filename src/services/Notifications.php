@@ -99,7 +99,7 @@ class Notifications extends Component
 
         return array_values(array_filter(
             array_map('trim', explode(',', $resolved)),
-            static fn(string $a): bool => $a !== '' && filter_var($a, FILTER_VALIDATE_EMAIL) !== false
+            static fn (string $a): bool => $a !== '' && filter_var($a, FILTER_VALIDATE_EMAIL) !== false
         ));
     }
 }

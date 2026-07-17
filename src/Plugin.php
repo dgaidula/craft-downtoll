@@ -9,11 +9,14 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
+use craft\services\Elements;
 use craft\services\Fields;
+use craft\services\Gc;
 use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use dgaidula\downtoll\elements\Submission;
 use dgaidula\downtoll\fields\GatedContent as GatedContentField;
 use dgaidula\downtoll\models\Settings;
 use dgaidula\downtoll\services\FormConfig;
@@ -39,11 +42,12 @@ use yii\base\Event;
  */
 class Plugin extends BasePlugin
 {
-    public string $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.1.0';
     public bool $hasCpSettings = true;
     public bool $hasCpSection = true;
 
     public const PERMISSION_MANAGE = 'downtoll:manageConfig';
+    public const PERMISSION_VIEW_SUBMISSIONS = 'downtoll:viewSubmissions';
 
     /**
      * LITE (free) — a complete product on its own: gate a file behind a form, capture the
@@ -92,10 +96,12 @@ class Plugin extends BasePlugin
         }
 
         $this->registerFieldType();
+        $this->registerElementType();
         $this->registerRoutes();
         $this->registerPermissions();
         $this->registerTwigVariable();
         $this->registerTemplateRoot();
+        $this->registerGarbageCollection();
 
         // PRO: the shipped, integration-agnostic listener. Vendor CRM/ESP mapping belongs
         // in a SEPARATE site-side listener on the same event — see examples/.
@@ -117,6 +123,16 @@ class Plugin extends BasePlugin
         $item['label'] = $this->name ?: Craft::t('downtoll', 'Downtoll');
         // Bundled Font Awesome solid icon. Alternatives: torii-gate, lock-keyhole, shield-halved, vault.
         $item['icon'] = 'fence';
+        $item['subnav'] = [
+            'submissions' => [
+                'label' => Craft::t('downtoll', 'Submissions'),
+                'url' => 'downtoll/submissions',
+            ],
+            'config' => [
+                'label' => Craft::t('downtoll', 'Form Config'),
+                'url' => 'downtoll/config',
+            ],
+        ];
         return $item;
     }
 
@@ -144,6 +160,17 @@ class Plugin extends BasePlugin
         );
     }
 
+    private function registerElementType(): void
+    {
+        Event::on(
+            Elements::class,
+            Elements::EVENT_REGISTER_ELEMENT_TYPES,
+            static function (RegisterComponentTypesEvent $event): void {
+                $event->types[] = Submission::class;
+            }
+        );
+    }
+
     private function registerRoutes(): void
     {
         Event::on(
@@ -162,7 +189,9 @@ class Plugin extends BasePlugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             static function (RegisterUrlRulesEvent $event): void {
-                $event->rules['downtoll'] = 'downtoll/config/index';
+                $event->rules['downtoll'] = 'downtoll/submissions/index';
+                $event->rules['downtoll/submissions'] = 'downtoll/submissions/index';
+                $event->rules['downtoll/config'] = 'downtoll/config/index';
             }
         );
     }
@@ -179,6 +208,9 @@ class Plugin extends BasePlugin
                         self::PERMISSION_MANAGE => [
                             'label' => Craft::t('downtoll', 'Manage gated form configuration'),
                         ],
+                        self::PERMISSION_VIEW_SUBMISSIONS => [
+                            'label' => Craft::t('downtoll', 'View form submissions'),
+                        ],
                     ],
                 ];
             }
@@ -194,6 +226,20 @@ class Plugin extends BasePlugin
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('downtoll', DowntollVariable::class);
+            }
+        );
+    }
+
+    private function registerGarbageCollection(): void
+    {
+        // Retention purge (P4): the moment submissions are stored, Lite holds PII
+        // indefinitely — this bounds it. Fires during `php craft gc` and Craft's
+        // scheduled garbage collection; a no-op while submissionRetentionDays is 0.
+        Event::on(
+            Gc::class,
+            Gc::EVENT_RUN,
+            function (): void {
+                $this->submissions->purgeExpired();
             }
         );
     }

@@ -4,8 +4,10 @@ namespace dgaidula\downtoll\services;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
+use dgaidula\downtoll\elements\Submission;
 use dgaidula\downtoll\events\SubmissionEvent;
 use dgaidula\downtoll\models\ResourceConfig;
 use dgaidula\downtoll\Plugin;
@@ -171,6 +173,95 @@ class Submissions extends Component
         }
 
         return $event;
+    }
+
+    /**
+     * Persist a validated submission as a Submission element (the CP lead index).
+     *
+     * Maps the normalized Title-Case contract onto the element's columns and keeps
+     * the FULL payload as JSON, so new form fields are captured without a
+     * migration. Available on BOTH editions — lead capture is core, not Pro.
+     *
+     * @param array<string,mixed> $fields The normalized Title-Case payload
+     * @return Submission|null The saved element, or null on failure (logged)
+     */
+    public function store(array $fields, ResourceConfig $config, ?string $downloadName): ?Submission
+    {
+        $submission = new Submission();
+        $submission->email = $fields['Email'] ?? null;
+        $submission->firstName = $fields['First Name'] ?? null;
+        $submission->lastName = $fields['Last Name'] ?? null;
+        $submission->state = $fields['State'] ?? null;
+        $submission->affiliation = $fields['Affiliation'] ?? null;
+        $submission->otherAffiliation = $fields['Other Affiliation'] ?? null;
+        $submission->schoolDistrict = $fields['School District Input'] ?? null;
+        $submission->districtId = $fields['District Id'] ?? null;
+        $submission->downloadName = $downloadName;
+        $submission->resourceId = (int) $config->resourceId ?: null;
+        $submission->siteId = Craft::$app->getSites()->getCurrentSite()->id;
+        $submission->setNewsletterLists($fields['Newsletter Lists'] ?? null);
+        $submission->payload = Json::encode($fields);
+
+        if (!Craft::$app->getElements()->saveElement($submission)) {
+            Craft::error(
+                'Failed to save submission element: ' . Json::encode($submission->getErrors()),
+                'downtoll'
+            );
+            return null;
+        }
+
+        return $submission;
+    }
+
+    /**
+     * Hard-delete stored submissions older than the retention window (a real PII
+     * purge — bypasses the trash). Runs during Craft's garbage collection and via
+     * `php craft downtoll/submissions/purge`.
+     *
+     * The canonical age is the ELEMENT's dateCreated (the {{%elements}} row),
+     * which the element query exposes as `dateCreated`.
+     *
+     * @param int|null $days Retention window in days. Null reads the
+     * `submissionRetentionDays` setting; 0 or less = retention disabled (no-op).
+     * @return int The number of submissions actually deleted
+     */
+    public function purgeExpired(?int $days = null): int
+    {
+        $days ??= Plugin::getInstance()->getSettings()->submissionRetentionDays;
+        if ($days <= 0) {
+            return 0;
+        }
+
+        $cutoff = (new \DateTime())->sub(new \DateInterval("P{$days}D"));
+
+        // Collect ids first (cheap), then load + delete one element at a time —
+        // avoids both loading every element up front and paginating a result set
+        // that shrinks as it is deleted.
+        $ids = Submission::find()
+            ->status(null)
+            ->dateCreated('< ' . Db::prepareDateForDb($cutoff))
+            ->ids();
+
+        $elements = Craft::$app->getElements();
+        $deleted = 0;
+
+        foreach ($ids as $id) {
+            try {
+                $submission = Submission::find()->status(null)->id($id)->one();
+                // `true` = hard delete: skip the trash so the PII is actually gone.
+                if ($submission && $elements->deleteElement($submission, true)) {
+                    $deleted++;
+                }
+            } catch (\Throwable $e) {
+                // One bad row must not abort the whole purge.
+                Craft::error(
+                    "Failed to purge expired submission {$id}: {$e->getMessage()}",
+                    'downtoll'
+                );
+            }
+        }
+
+        return $deleted;
     }
 
     /**

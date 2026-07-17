@@ -41,6 +41,15 @@ class Settings extends Model
     /** Fallback message shown when a submission fails (per-resource override available). */
     public string $defaultErrorMessage = 'Something went wrong. Please try again.';
 
+    /**
+     * Retention window for stored submissions, in days. 0 = keep submissions
+     * forever (no purge); a positive N = hard-delete submissions older than
+     * N days (runs during Craft's garbage collection). Submissions hold PII
+     * (names, emails), so a bounded window is the privacy-friendly default
+     * once you no longer need old leads.
+     */
+    public int $submissionRetentionDays = 0;
+
     // --- Notifications ---
 
     /**
@@ -127,6 +136,7 @@ class Settings extends Model
             [['defaultSuccessMode'], 'in', 'range' => ['swap', 'reload']],
             [['recaptchaMinScore'], 'number', 'min' => 0, 'max' => 1],
             [['downloadTtl'], 'integer', 'min' => 30],
+            [['submissionRetentionDays'], 'integer', 'min' => 0],
             [['webhookUrl'], 'validateWebhook'],
             [['notifyRecipients'], 'validateNotifyRecipients'],
         ];

@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.1.0 - unreleased
+
+### Added
+- **Submission storage + CP lead index** — every submission is now captured as a
+  native Craft **Submission** element (both editions), so leads get a searchable,
+  sortable, paginated CP index for free. The Downtoll CP section becomes a subnav:
+  **Submissions** (the lead index) and **Form Config**. Commonly-queried fields are
+  real columns on `{{%downtoll_submissions}}`; the full normalized Title-Case payload
+  is also stored as JSON, so a new form field never needs a schema migration.
+  Storage runs after access is granted and is failure-isolated — a storage hiccup
+  can never cost a visitor their download. New permission `downtoll:viewSubmissions`.
+- **Lead CSV export** (Pro) — the element index's Export button, gated to Pro via
+  `Submission::defineExporters()`; Lite hides it.
+- **Retention / purge** — new `submissionRetentionDays` setting (Settings → General;
+  `0` keeps forever, `N` hard-deletes leads older than N days). Enforced during
+  Craft's garbage collection (`Gc::EVENT_RUN`) and runnable on demand with
+  `php craft downtoll/submissions/purge`. Non-optional privacy hygiene now that Lite
+  stores PII.
+- **`docs/DEVELOPMENT.md`** — a contributor/customizer development guide (architecture,
+  editions model, extension points, data model, and the local dev loop).
+
+### Notes
+- Schema version → `1.1.0`. Existing installs get `{{%downtoll_submissions}}` via
+  migration `m260716_120000_downtoll_submissions`; fresh installs via `Install`.
+
 ## 1.0.0 - 2026-07-16
 
 > Renamed from **Gated Content** (`iceboxind/craft-gated-content`) to **Downtoll**

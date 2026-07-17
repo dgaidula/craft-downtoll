@@ -6,7 +6,7 @@
 
 {% block content %}
     <input type="hidden" name="action" value="downtoll/config/save">
-    {{ redirectInput('downtoll') }}
+    {{ redirectInput('downtoll/config') }}
 
     <h2>{{ 'Affiliation options'|t('downtoll') }}</h2>
     {{ forms.editableTable({

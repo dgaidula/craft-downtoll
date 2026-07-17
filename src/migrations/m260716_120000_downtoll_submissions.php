@@ -5,35 +5,18 @@ namespace dgaidula\downtoll\migrations;
 use craft\db\Migration;
 
 /**
- * Install migration.
+ * m260716_120000_downtoll_submissions migration.
  *
- * Creates the plugin-owned config table. This lives in the CONTENT layer
- * (a plain DB table written by the plugin's own controllers), NOT in project
- * config — so editors can manage form structure + newsletter routing on
- * production even when `allowAdminChanges` is false. The plugin ships and
- * owns this table, keeping it fully self-contained for the Plugin Store.
+ * Adds the {{%downtoll_submissions}} element sub-table (lead storage) to
+ * already-installed sites. Mirrors the table created in {@see Install} for
+ * fresh installs; idempotent so running it after a fresh install is a no-op.
  */
-class Install extends Migration
+class m260716_120000_downtoll_submissions extends Migration
 {
-    public const CONFIG_TABLE = '{{%downtoll_config}}';
     public const SUBMISSIONS_TABLE = '{{%downtoll_submissions}}';
 
     public function safeUp(): bool
     {
-        if (!$this->db->tableExists(self::CONFIG_TABLE)) {
-            $this->createTable(self::CONFIG_TABLE, [
-                'id'          => $this->primaryKey(),
-                'configData'  => $this->longText(),
-                'dateCreated' => $this->dateTime()->notNull(),
-                'dateUpdated' => $this->dateTime()->notNull(),
-                'uid'         => $this->uid(),
-            ]);
-        }
-
-        // Lead storage: an element sub-table keyed to {{%elements}}.id (standard
-        // element pattern). Commonly-queried fields get real columns; `payload`
-        // keeps the FULL normalized Title-Case submission as JSON so new form
-        // fields never require a migration.
         if (!$this->db->tableExists(self::SUBMISSIONS_TABLE)) {
             $this->createTable(self::SUBMISSIONS_TABLE, [
                 'id'               => $this->integer()->notNull(),
@@ -66,10 +49,9 @@ class Install extends Migration
     public function safeDown(): bool
     {
         // Remove the submission elements' base rows first (cascades to the
-        // sub-table via the FK), then drop the plugin tables.
+        // sub-table via the FK), then drop the table itself.
         $this->delete('{{%elements}}', ['type' => 'dgaidula\\downtoll\\elements\\Submission']);
         $this->dropTableIfExists(self::SUBMISSIONS_TABLE);
-        $this->dropTableIfExists(self::CONFIG_TABLE);
         return true;
     }
 }
