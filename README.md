@@ -6,6 +6,11 @@ Gated downloads and lead capture for Craft 5. Put any file behind a form: Downto
 validates the submission, emails you the lead, and releases the download.
 Self-contained — no CRM bundled.
 
+## Requirements
+
+**Craft CMS 5.0+ · PHP 8.2+ (tested through 8.4).** Downtoll is a Craft 5 plugin and
+does not run on Craft 4.
+
 ## What it does
 
 1. **Field type** — add a *Gated Content* field to any entry type. Editors then
