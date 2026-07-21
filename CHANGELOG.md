@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 - unreleased
+## 1.2.0 - 2026-07-21
 
 ### Added
 - **Full-state default gated configuration** (Pro) — a new **Settings → General →
