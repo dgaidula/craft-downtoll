@@ -4,7 +4,10 @@
 
 {# The asset is chosen per page and is never part of a default, so the plugin
    Settings "defaults" editor reuses this same UI with showAsset = false. #}
+
+<div class="flex" style="margin:24px 0;">
 {% if showAsset ?? true %}
+<div style="flex:1 1 0">
 {{ forms.elementSelectField({
     label: 'Gated asset'|t('downtoll'),
     instructions: 'The file released after a successful submission.'|t('downtoll'),
@@ -14,8 +17,9 @@
     limit: 1,
     elements: asset ? [asset] : [],
 }) }}
+</div>
 {% endif %}
-
+  <div style="flex:1 1 0">
 {{ forms.selectField({
     label: 'Success behavior'|t('downtoll'),
     id: name ~ '-successMode',
@@ -26,13 +30,27 @@
     ],
     value: value.successMode,
 }) }}
-
+</div>
+</div>
+<div class="flex" style="margin:24px 0;">
+<div style="flex:1 1 0">
 {{ forms.lightswitchField({
     label: 'Include “I’m a…” affiliation field'|t('downtoll'),
     id: name ~ '-includeAffiliation',
     name: name ~ '[includeAffiliation]',
     on: value.includeAffiliation,
 }) }}
+</div>
+<div style="flex:1 1 0">
+{{ forms.textField({
+    label: 'Extra CSS class'|t('downtoll'),
+    instructions: 'Optional. Added to the form wrapper so you can target this form from your stylesheet (advanced).'|t('downtoll'),
+    id: name ~ '-cssClass',
+    name: name ~ '[cssClass]',
+    value: value.cssClass,
+}) }}
+</div>
+</div>
 
 {{ forms.checkboxGroupField({
     label: 'Required fields'|t('downtoll'),
@@ -47,14 +65,26 @@
     ],
     values: value.requiredFields,
 }) }}
-
 {{ forms.lightswitchField({
     label: 'Include newsletter opt-in'|t('downtoll'),
+    instructions:'',
     id: name ~ '-includeNewsletter',
     name: name ~ '[includeNewsletter]',
     on: value.includeNewsletter,
 }) }}
 
+
+<div class="flex" style="margin:24px 0;">
+<div style="flex:1 1 0; padding:0 10px 0 0;">
+{{ forms.textField({
+    label: 'Newsletter heading'|t('downtoll'),
+    instructions: 'Shown above the newsletter checkboxes. Supports the “{site}” token. Leave blank to hide it.'|t('downtoll'),
+    id: name ~ '-newsletterHeading',
+    name: name ~ '[newsletterHeading]',
+    value: value.newsletterHeading,
+}) }}
+</div>
+<div style="flex:2 1 0; padding:0 0 10px 10px;">
 {{ forms.checkboxGroupField({
     label: 'Newsletter lists'|t('downtoll'),
     instructions: 'Which lists this resource offers as opt-in checkboxes. Manage the catalog (and HTML labels) under the Downtoll section.'|t('downtoll'),
@@ -63,32 +93,22 @@
     options: listOptions,
     values: value.newsletterListIds,
 }) }}
+</div>
+</div>
 
-{{ forms.textField({
-    label: 'Newsletter heading'|t('downtoll'),
-    instructions: 'Shown above the newsletter checkboxes. Supports the “{site}” token. Leave blank to hide it.'|t('downtoll'),
-    id: name ~ '-newsletterHeading',
-    name: name ~ '[newsletterHeading]',
-    value: value.newsletterHeading,
-}) }}
 
-{{ forms.textField({
-    label: 'Extra CSS class'|t('downtoll'),
-    instructions: 'Optional. Added to the form wrapper so you can target this form from your stylesheet (advanced).'|t('downtoll'),
-    id: name ~ '-cssClass',
-    name: name ~ '[cssClass]',
-    value: value.cssClass,
-}) }}
-
+<div class="flex" style="margin:24px 0;">
+<div style="flex:1 1 0; padding: 0 10px 10px 0;">
 {{ forms.textareaField({
     label: 'Success message'|t('downtoll'),
-    instructions: 'Optional. Shown above the download button after a successful submission. HTML allowed (e.g. <h2>Thanks!</h2>).'|t('downtoll'),
+    instructions: 'Optional. Shown above the download button after a successful submission. HTML allowed `(e.g. <h2>Thanks!</h2>)`.'|t('downtoll'),
     id: name ~ '-successMessage',
     name: name ~ '[successMessage]',
     rows: 3,
     value: value.successMessage,
 }) }}
-
+</div>
+<div style="flex:1 1 0; padding:0 0 10px 10px;">
 {{ forms.textareaField({
     label: 'Error message'|t('downtoll'),
     instructions: 'Optional. Shown if the submission fails. HTML allowed. Leave blank to use the plugin default.'|t('downtoll'),
@@ -97,3 +117,5 @@
     rows: 3,
     value: value.errorMessage,
 }) }}
+</div>
+</div>

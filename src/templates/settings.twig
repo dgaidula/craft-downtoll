@@ -22,6 +22,8 @@
         value: settings.pluginName,
     }) }}
 
+    <div class="flex" style="margin:24px 0;">
+    <div style="flex:1 1 0; padding:0 10px 0 0;">
     {{ forms.selectField({
         label: 'Default success behavior'|t('downtoll'),
         instructions: 'Per-entry fields can override this.'|t('downtoll'),
@@ -33,7 +35,8 @@
         ],
         value: settings.defaultSuccessMode,
     }) }}
-
+    </div>
+    <div style="flex:1 1 0; padding:0 0 0 10px;">
     {{ forms.textField({
         label: 'Newsletter heading'|t('downtoll'),
         instructions: 'Shown above the newsletter checkboxes. Use {site} for the current site name.'|t('downtoll'),
@@ -41,17 +44,23 @@
         name: 'newsletterHeading',
         value: settings.newsletterHeading,
     }) }}
+    </div>
+    </div>
 
     <hr>
 
     <h2>{{ 'Lead notifications'|t('downtoll') }}</h2>
     <p class="light">{{ 'Email each captured lead to a human. Without this — and without a Pro integration listener — a submission is gated, served, and then gone.'|t('downtoll') }}</p>
+    <div class="flex" style="margin:24px 0;">
+    <div style="flex:1 1 0; padding:0 10px 0 0;">
     {{ forms.lightswitchField({
         label: 'Email me each lead'|t('downtoll'),
         id: 'notifyEnabled',
         name: 'notifyEnabled',
         on: settings.notifyEnabled,
     }) }}
+    </div>
+    <div style="flex:1 1 0; padding:0 0 0 10px;">
     {{ forms.autosuggestField({
         label: 'Recipients'|t('downtoll'),
         instructions: 'Comma-separated. Literal addresses or an $ENVIRONMENT_VARIABLE (resolved server-side).'|t('downtoll'),
@@ -61,6 +70,10 @@
         value: settings.notifyRecipients,
         errors: settings.getErrors('notifyRecipients'),
     }) }}
+    </div>
+    </div>
+    <div class="flex" style="margin:24px 0;">
+    <div style="flex:1 1 0; padding:0 10px 0 0;">
     {{ forms.textField({
         label: 'Subject'|t('downtoll'),
         instructions: 'Use {download} for the gated file’s name and {site} for the site name.'|t('downtoll'),
@@ -68,6 +81,8 @@
         name: 'notifySubject',
         value: settings.notifySubject,
     }) }}
+    </div>
+    <div style="flex:1 1 0; padding:0 0 0 10px;">
     {{ forms.autosuggestField({
         label: 'From address'|t('downtoll'),
         instructions: 'Optional. Blank uses Craft’s system From — set this if that isn’t configured, since an empty From makes the mailer reject the message.'|t('downtoll'),
@@ -76,6 +91,8 @@
         suggestEnvVars: true,
         value: settings.notifyFrom,
     }) }}
+    </div>
+    </div>
 
     <hr>
 
