@@ -90,6 +90,21 @@
         value: settings.submissionRetentionDays,
         errors: settings.getErrors('submissionRetentionDays'),
     }) }}
+
+    {% if isPro %}
+        <hr>
+
+        <h2>{{ 'Defaults for new gated pages (Pro)'|t('downtoll') }}</h2>
+        <p class="light">{{ 'The starting configuration a brand-new Gated Content field initializes from, so an editor only has to pick the asset on a fresh page. Existing/saved pages are never affected. An asset is never part of a default.'|t('downtoll') }}</p>
+
+        {% include 'downtoll/_field/input' with {
+            name: 'defaultResourceConfig',
+            value: defaultConfig,
+            listOptions: listOptions,
+            asset: null,
+            showAsset: false,
+        } only %}
+    {% endif %}
 </div>
 
 <div id="gc-integrations" class="hidden">

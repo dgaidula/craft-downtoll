@@ -50,6 +50,26 @@ class Settings extends Model
      */
     public int $submissionRetentionDays = 0;
 
+    // --- Defaults for new gated pages (PRO) ---
+
+    /**
+     * PRO. The full default {@see ResourceConfig} state a BRAND-NEW (never-saved)
+     * Gated Content field initializes from, so an editor only has to pick the asset
+     * on a fresh page. Stored as the same serialized shape
+     * {@see \dgaidula\downtoll\fields\GatedContent::serializeValue()} produces
+     * (successMode, includeAffiliation, includeNewsletter, newsletterListIds,
+     * requiredFields, cssClass, newsletterHeading, successMessage, errorMessage) —
+     * EXCEPT an asset is never defaulted (`assetId` is always forced to null).
+     *
+     * Empty (the default) = no full-state default; new fields fall back to the
+     * hardcoded fresh-field defaults (affiliation ON, newsletter OFF). Lite ignores
+     * this entirely. Project config, dev-owned like every other setting here; the
+     * posted value is canonicalized in {@see self::normalizeDefaultResourceConfig()}.
+     *
+     * @var array<string,mixed>
+     */
+    public array $defaultResourceConfig = [];
+
     // --- Notifications ---
 
     /**
@@ -139,6 +159,39 @@ class Settings extends Model
             [['submissionRetentionDays'], 'integer', 'min' => 0],
             [['webhookUrl'], 'validateWebhook'],
             [['notifyRecipients'], 'validateNotifyRecipients'],
+            // Marks the attribute safe for setAttributes() AND canonicalizes the
+            // posted default into a clean, typed shape before it hits project config.
+            [['defaultResourceConfig'], 'normalizeDefaultResourceConfig'],
+        ];
+    }
+
+    /**
+     * Canonicalize the posted `defaultResourceConfig` into the same serialized shape
+     * a saved field value uses, so project config holds a clean, typed record (bools
+     * as bools, filtered arrays) and never an asset. Runs during validate(), which
+     * `Plugins::savePluginSettings()` calls before persisting; idempotent, so
+     * re-validating an already-clean value is a no-op.
+     */
+    public function normalizeDefaultResourceConfig(string $attribute): void
+    {
+        $data = $this->defaultResourceConfig;
+        if (!is_array($data) || $data === []) {
+            $this->defaultResourceConfig = [];
+            return;
+        }
+
+        $config = ResourceConfig::fromFieldData($data, $this);
+        $this->defaultResourceConfig = [
+            'assetId'            => null,
+            'successMode'        => $config->successMode,
+            'includeAffiliation' => $config->includeAffiliation,
+            'includeNewsletter'  => $config->includeNewsletter,
+            'newsletterListIds'  => $config->newsletterListIds,
+            'requiredFields'     => $config->requiredFields,
+            'cssClass'           => $config->cssClass,
+            'newsletterHeading'  => $config->newsletterHeading,
+            'successMessage'     => $config->successMessage,
+            'errorMessage'       => $config->errorMessage,
         ];
     }
 

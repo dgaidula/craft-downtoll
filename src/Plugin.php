@@ -18,6 +18,7 @@ use craft\web\UrlManager;
 use craft\web\View;
 use dgaidula\downtoll\elements\Submission;
 use dgaidula\downtoll\fields\GatedContent as GatedContentField;
+use dgaidula\downtoll\models\ResourceConfig;
 use dgaidula\downtoll\models\Settings;
 use dgaidula\downtoll\services\FormConfig;
 use dgaidula\downtoll\services\Notifications;
@@ -143,9 +144,27 @@ class Plugin extends BasePlugin
 
     protected function settingsHtml(): ?string
     {
+        $settings = $this->getSettings();
+
+        // PRO: the "defaults for new gated pages" editor reuses the field's own UI.
+        // Hydrate it from the saved default when present, otherwise from an empty
+        // array — which yields the exact fresh-field starting state a new page shows
+        // today (so the admin edits a coherent baseline, not a blank slate).
+        $default = $settings->defaultResourceConfig;
+        $defaultConfig = ResourceConfig::fromFieldData(is_array($default) ? $default : [], $settings);
+
+        // Same catalog list options the field offers, for the newsletter checkboxes.
+        $listOptions = [];
+        foreach ($this->formConfig->getNewsletterLists() as $list) {
+            $listOptions[] = ['label' => strip_tags((string) $list['label']), 'value' => $list['listId']];
+        }
+
         return Craft::$app->getView()->renderTemplate('downtoll/settings', [
-            'plugin'   => $this,
-            'settings' => $this->getSettings(),
+            'plugin'        => $this,
+            'settings'      => $settings,
+            'isPro'         => $this->isPro(),
+            'defaultConfig' => $defaultConfig,
+            'listOptions'   => $listOptions,
         ]);
     }
 

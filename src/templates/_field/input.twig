@@ -2,6 +2,9 @@
 
 {# Per-entry gating config (CONTENT — editable on prod). #}
 
+{# The asset is chosen per page and is never part of a default, so the plugin
+   Settings "defaults" editor reuses this same UI with showAsset = false. #}
+{% if showAsset ?? true %}
 {{ forms.elementSelectField({
     label: 'Gated asset'|t('downtoll'),
     instructions: 'The file released after a successful submission.'|t('downtoll'),
@@ -11,6 +14,7 @@
     limit: 1,
     elements: asset ? [asset] : [],
 }) }}
+{% endif %}
 
 {{ forms.selectField({
     label: 'Success behavior'|t('downtoll'),

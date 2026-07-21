@@ -78,6 +78,60 @@ class ResourceConfig extends Model
         ];
     }
 
+    /**
+     * Decode a stored/posted field-value array into an (un-enriched) ResourceConfig.
+     *
+     * This is the single source of truth for the array → config mapping, shared by
+     * {@see \dgaidula\downtoll\fields\GatedContent::normalizeValue()} (per-entry
+     * content) and the plugin Settings "defaults" editor (Pro). It does NOT enrich
+     * from the live element or the FormConfig catalog — callers that need that
+     * (i.e. the field) do it afterwards.
+     *
+     * `$settings` supplies the two global fallbacks a NEVER-configured field inherits:
+     * the default success mode and the default newsletter heading. Passing an empty
+     * `$data` therefore yields the exact fresh-field starting state.
+     */
+    public static function fromFieldData(array $data, Settings $settings): self
+    {
+        $config = new self();
+
+        // The asset element-select posts an array of IDs on save (e.g. ['123']);
+        // a stored value decodes to a scalar int. Handle both.
+        $assetId = $data['assetId'] ?? null;
+        if (is_array($assetId)) {
+            $assetId = $assetId[0] ?? null;
+        }
+        $config->assetId = ($assetId !== null && $assetId !== '') ? (int) $assetId : null;
+
+        $config->successMode = $data['successMode'] ?? $settings->defaultSuccessMode;
+        $config->includeAffiliation = (bool) ($data['includeAffiliation'] ?? true);
+        $config->includeNewsletter = (bool) ($data['includeNewsletter'] ?? false);
+
+        $ids = $data['newsletterListIds'] ?? [];
+        $config->newsletterListIds = is_array($ids) ? array_values(array_filter($ids)) : [];
+
+        // Required fields: default the standard set when never configured; once
+        // saved (key present), respect the editor's choice (even an empty set).
+        if (array_key_exists('requiredFields', $data)) {
+            $rf = $data['requiredFields'];
+            $config->requiredFields = is_array($rf) ? array_values(array_filter($rf)) : [];
+        }
+
+        // Custom CSS class: sanitize to safe class-name chars (no injection).
+        $config->cssClass = trim(preg_replace('/[^A-Za-z0-9 _\-]/', '', (string) ($data['cssClass'] ?? '')));
+
+        // Per-resource newsletter heading (content). Default to the global setting
+        // only when the field has never been configured (key absent).
+        $config->newsletterHeading = array_key_exists('newsletterHeading', $data)
+            ? trim((string) $data['newsletterHeading'])
+            : $settings->newsletterHeading;
+
+        $config->successMessage = trim((string) ($data['successMessage'] ?? ''));
+        $config->errorMessage = trim((string) ($data['errorMessage'] ?? ''));
+
+        return $config;
+    }
+
     /** The minimal, server-trusted subset embedded in the signed `_gcConfig` token. */
     public function toTokenArray(): array
     {

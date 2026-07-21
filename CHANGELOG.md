@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.0 - unreleased
+
+### Added
+- **Full-state default gated configuration** (Pro) — a new **Settings → General →
+  “Defaults for new gated pages (Pro)”** section lets an admin save an entire default
+  `ResourceConfig` once, using the exact same editor UI as a real page (minus the asset
+  picker). A brand-new (never-saved) **Gated Content** field then initializes from that
+  saved default, so an editor only has to pick the asset on a fresh page. Saved/existing
+  pages are never affected, an asset is never defaulted (`assetId` is always null), and
+  Lite is byte-for-byte unchanged (feature hidden, hardcoded fresh-field defaults —
+  affiliation on / newsletter off — retained). Stored in project config like every other
+  setting; no content migration (only affects NEW pages), so the schema version is unchanged.
+
+### Notes
+- No schema change (`schemaVersion` stays `1.1.0`). Purely additive Settings + field
+  initialization behavior, gated behind the Pro edition.
+
 ## 1.1.0 - unreleased
 
 ### Added

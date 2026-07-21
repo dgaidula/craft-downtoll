@@ -36,39 +36,22 @@ class GatedContent extends Field
             $config = $value;
         } else {
             $data = is_string($value) ? (Json::decodeIfJson($value) ?: []) : (is_array($value) ? $value : []);
-            $config = new ResourceConfig();
+            $settings = Plugin::getInstance()->getSettings();
 
-            // The asset element-select posts an array of IDs on save (e.g. ['123']);
-            // a stored value decodes to a scalar int. Handle both.
-            $assetId = $data['assetId'] ?? null;
-            if (is_array($assetId)) {
-                $assetId = $assetId[0] ?? null;
-            }
-            $config->assetId = ($assetId !== null && $assetId !== '') ? (int) $assetId : null;
-            $config->successMode = $data['successMode'] ?? Plugin::getInstance()->getSettings()->defaultSuccessMode;
-            $config->includeAffiliation = (bool) ($data['includeAffiliation'] ?? true);
-            $config->includeNewsletter = (bool) ($data['includeNewsletter'] ?? false);
-            $ids = $data['newsletterListIds'] ?? [];
-            $config->newsletterListIds = is_array($ids) ? array_values(array_filter($ids)) : [];
-
-            // Required fields: default the standard set when never configured; once
-            // saved (key present), respect the editor's choice (even an empty set).
-            if (array_key_exists('requiredFields', $data)) {
-                $rf = $data['requiredFields'];
-                $config->requiredFields = is_array($rf) ? array_values(array_filter($rf)) : [];
+            // PRO: seed a brand-new (never-saved) field from the admin-defined default
+            // ResourceConfig. An empty $data is the fresh-field signal — a saved entry
+            // (non-empty $data) is NEVER re-seeded, and an asset is never defaulted.
+            // Lite, and Pro-without-a-saved-default, both fall through to the same
+            // hardcoded fresh-field defaults as before.
+            if ($data === []) {
+                $default = $settings->defaultResourceConfig;
+                if (Plugin::getInstance()->isPro() && is_array($default) && $default !== []) {
+                    $data = $default;
+                    $data['assetId'] = null;
+                }
             }
 
-            // Custom CSS class: sanitize to safe class-name chars (no injection).
-            $config->cssClass = trim(preg_replace('/[^A-Za-z0-9 _\-]/', '', (string) ($data['cssClass'] ?? '')));
-
-            // Per-resource newsletter heading (content). Default to the global setting
-            // only when the field has never been configured (key absent).
-            $config->newsletterHeading = array_key_exists('newsletterHeading', $data)
-                ? trim((string) $data['newsletterHeading'])
-                : Plugin::getInstance()->getSettings()->newsletterHeading;
-
-            $config->successMessage = trim((string) ($data['successMessage'] ?? ''));
-            $config->errorMessage = trim((string) ($data['errorMessage'] ?? ''));
+            $config = ResourceConfig::fromFieldData($data, $settings);
         }
 
         // Identify + enrich from the live element and the plugin-owned catalog.
