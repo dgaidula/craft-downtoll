@@ -174,14 +174,14 @@ class Settings extends Model
      */
     public function normalizeDefaultResourceConfig(string $attribute): void
     {
-        $data = $this->defaultResourceConfig;
+        $data = $this->$attribute;
         if (!is_array($data) || $data === []) {
-            $this->defaultResourceConfig = [];
+            $this->$attribute = [];
             return;
         }
 
         $config = ResourceConfig::fromFieldData($data, $this);
-        $this->defaultResourceConfig = [
+        $this->$attribute = [
             'assetId'            => null,
             'successMode'        => $config->successMode,
             'includeAffiliation' => $config->includeAffiliation,
