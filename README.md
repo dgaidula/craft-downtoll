@@ -39,6 +39,7 @@ your systems** — the free edition is a complete product, not a trial.
 | Signed download / session unlock | ✅ | ✅ |
 | **Lead notification emails** | ✅ | ✅ |
 | Newsletter opt-in checkbox | single | **multi-list** |
+| **Defaults for new gated pages** | — | ✅ |
 | `triggersHook` routing modifiers | — | ✅ |
 | District lookup typeahead endpoint | — | ✅ |
 | `EVENT_AFTER_SUBMISSION` (custom CRM/ESP listeners) | — | ✅ |
@@ -75,6 +76,19 @@ return [
 This exists for a seamless rename: if editors have always known this feature by
 another name, keep that label so the internal package name is never something they
 have to notice.
+
+### Defaults for new gated pages <sup>PRO</sup>
+
+When creating brand-new gated pages, editors typically configure the same settings
+over and over: affiliation option, newsletter lists, success behavior, and so on.
+Pro adds **Settings → General → Defaults for new gated pages**, where an admin saves
+an entire default configuration once using the same editor UI as a real page (just
+without the asset picker). Any *fresh* (never-saved) Gated Content field then
+initializes from that saved default, so editors only have to choose the asset.
+
+Saved and existing pages are never affected — the defaults only seed empty fields.
+An asset is never defaulted (`assetId` is always null). On Lite, defaults are hidden
+and fresh fields retain the standard hardcoded defaults (affiliation on, newsletter off).
 
 ### Lead notifications
 

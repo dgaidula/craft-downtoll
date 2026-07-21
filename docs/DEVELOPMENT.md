@@ -181,8 +181,9 @@ Where each gate lives:
 | `EVENT_AFTER_SUBMISSION` firing | `Submissions::fireAfterSubmission()` | The event object is still built and returned (the caller’s contract is unchanged, `isValid` stays `true`), but `trigger()` is never called — so no listener, including the shipped webhook, runs. |
 | Webhook listener attachment | `Plugin::init()` | Not attached (it would be inert anyway, since the event never fires). |
 | Multi-list opt-in + `triggersHook` routing | `Submissions::enrich()` | The offered lists are sliced to a single plain opt-in and all hook flags/IDs are cleared. Capping in `enrich()` — not in the form — means `render()`, `data()`, and the submit path all agree, and a crafted POST can’t smuggle extra list IDs past Lite. |
-| District-lookup endpoint | `DowntollVariable::districtLookupEndpoint()` | Returns `''`, so the form omits `data-lookup-endpoint` and the district input degrades to a plain text field (which still submits as `School District Input`). |
+| District-lookup endpoint | `DowntollVariable::districtLookupEndpoint()` | Returns `’’`, so the form omits `data-lookup-endpoint` and the district input degrades to a plain text field (which still submits as `School District Input`). |
 | Lead CSV export | `Submission::defineExporters()` | Returns `[]`, hiding the element index’s Export button. |
+| Defaults for new gated pages | `GatedContent::normalizeValue()` + `Settings::$defaultResourceConfig` | Fresh field initializes from hardcoded defaults (affiliation on, newsletter off); the `Settings` UI section is hidden. |
 
 When adding a new Pro feature, follow the same pattern: gate it **server-side**,
 at the narrowest choke point, via `Plugin::getInstance()->isPro()`, and leave the
@@ -295,8 +296,9 @@ role and mutable in the right environment:
    list identifier never ships in page HTML.
 3. **`Settings` — PROJECT CONFIG, dev-owned.** Deploy-time values: default
    success mode, notification config, reCAPTCHA keys, webhook URL/secret, the
-   district-lookup endpoint, download TTL, retention days, the plugin name.
-   Locked on production when `allowAdminChanges` is off — by design.
+   district-lookup endpoint, download TTL, retention days, the plugin name, and
+   *(Pro)* a full saved default `ResourceConfig` for new gated pages. Locked on
+   production when `allowAdminChanges` is off — by design.
 
 The rule of thumb: if an editor should be able to change it on production, it is
 content (layers 1–2); if it is an environment or deployment concern, it is
