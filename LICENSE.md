@@ -1,6 +1,6 @@
 # License
 
-Copyright © 2026 Dan Gaidula. All rights reserved.
+Copyright © 2026 Danniel T. Gaidula. All rights reserved.
 
 This software is proprietary. It is **not** open source and is **not** placed in the
 public domain.
