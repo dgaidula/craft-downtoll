@@ -1,36 +1,42 @@
-# License
+# The Craft License
 
-Copyright © 2026 Danniel T. Gaidula. All rights reserved.
+Copyright © Danniel T. Gaidula
 
-This software is proprietary. It is **not** open source and is **not** placed in the
-public domain.
+Permission is hereby granted to any person obtaining a copy of this software
+(the “Software”) to use, copy, modify, merge, publish and/or distribute copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-## Grant of license
+1. **Don’t plagiarize.** The above copyright notice and this license shall be
+   included in all copies or substantial portions of the Software.
 
-Use of this software is permitted only under a separate written commercial agreement
-with the copyright holder. Absent such an agreement, no rights are granted.
+2. **Don’t use the same license on more than one project.** Each licensed copy
+   of the Software shall be actively installed in no more than one production
+   environment at a time.
 
-Where a commercial agreement is in force, and unless it states otherwise, the licensee
-is granted a non-exclusive, non-transferable right to install and use this software on
-the sites covered by that agreement, and to modify it for their own use.
+3. **Don’t mess with the licensing features.** Software features related to
+   licensing shall not be altered or circumvented in any way, including (but
+   not limited to) license validation, payment prompts, feature restrictions,
+   and update eligibility.
 
-## Restrictions
+4. **Pay up.** Payment shall be made immediately upon receipt of any notice,
+   prompt, reminder, or other message indicating that a payment is owed.
 
-Except as expressly permitted by a commercial agreement or by applicable law, the
-licensee may not:
+5. **Follow the law.** All use of the Software shall not violate any applicable
+   law or regulation, nor infringe the rights of any other person or entity.
 
-- redistribute, resell, sublicense, publish, or otherwise make this software available
-  to any third party;
-- remove or alter any copyright, license, or attribution notice.
+Failure to comply with the foregoing conditions will automatically and
+immediately result in termination of the permission granted hereby. This
+license does not include any right to receive updates to the Software or
+technical support. Licensees bear all risk related to the quality and
+performance of the Software and any modifications made or obtained to it,
+including liability for actual and consequential harm, such as loss or
+corruption of data, and any necessary service, repair, or correction.
 
-## Warranty and liability
-
-This software is provided "as is", without warranty of any kind, express or implied,
-including but not limited to the warranties of merchantability, fitness for a
-particular purpose, and non-infringement. In no event shall the copyright holder be
-liable for any claim, damages, or other liability arising from, out of, or in
-connection with this software or its use.
-
-## Contact
-
-Licensing enquiries: dan@gaidula.com
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, INCLUDING SPECIAL, INCIDENTAL AND CONSEQUENTIAL DAMAGES, WHETHER IN
+AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

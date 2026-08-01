@@ -17,7 +17,7 @@
 - No schema change (`schemaVersion` stays `1.1.0`). Purely additive Settings + field
   initialization behavior, gated behind the Pro edition.
 
-## 1.1.0 - unreleased
+## 1.1.0 - 2026-07-17
 
 ### Added
 - **Submission storage + CP lead index** — every submission is now captured as a

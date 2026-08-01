@@ -2,9 +2,13 @@
   "name": "dgaidula/craft-downtoll",
   "description": "Gated downloads and lead capture for Craft CMS.",
   "type": "craft-plugin",
+  "keywords": ["craft", "craft-cms", "craft-plugin", "gated-content", "lead-capture", "downloads"],
   "license": "proprietary",
   "support": {
-    "email": "dan@gaidula.com"
+    "email": "dan@gaidula.com",
+    "issues": "https://github.com/dgaidula/craft-downtoll/issues",
+    "source": "https://github.com/dgaidula/craft-downtoll",
+    "docs": "https://github.com/dgaidula/craft-downtoll/blob/main/README.md"
   },
   "require": {
     "php": ">=8.2",
@@ -31,7 +35,7 @@
     ],
     "developer": "Danniel T. Gaidula",
     "developerUrl": "https://gaidula.com",
-    "documentationUrl": "https://gaidula.com/downtoll",
+    "documentationUrl": "https://github.com/dgaidula/craft-downtoll/blob/main/README.md",
     "class": "dgaidula\\downtoll\\Plugin"
   }
 }
