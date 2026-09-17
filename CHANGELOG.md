@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- **Lead notification emails are now a Pro feature.** Lite still gates the file, captures
+  the lead, and stores it in the CP Submissions index; Pro delivers it — notification
+  email, webhook, after-submission event. Decided before the first Plugin Store
+  submission, because a feature can only move from a free edition to a paid one while
+  nobody depends on it. `Notifications::send()` is the single gate; saved `notify*`
+  settings are left untouched on Lite, so upgrading resumes sending with no
+  reconfiguration.
+
+### Upgrade note
+- An existing install running the **Lite** edition with notifications switched on stops
+  receiving lead emails after this update. Set the edition to Pro first
+  (`php craft project-config/set plugins.downtoll.edition pro`).
+
 ## 1.2.0 - 2026-07-21
 
 ### Added

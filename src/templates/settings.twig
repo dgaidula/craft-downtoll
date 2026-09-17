@@ -49,8 +49,11 @@
 
     <hr>
 
-    <h2>{{ 'Lead notifications'|t('downtoll') }}</h2>
-    <p class="light">{{ 'Email each captured lead to a human. Without this — and without a Pro integration listener — a submission is gated, served, and then gone.'|t('downtoll') }}</p>
+    <h2>{{ 'Lead notifications (Pro)'|t('downtoll') }}</h2>
+    {% if not isPro %}
+    <p class="light">{{ 'Every lead is stored under Downtoll → Submissions. Pro also emails each one to a human as it arrives, with Reply-To set to the lead.'|t('downtoll') }}</p>
+    {% else %}
+    <p class="light">{{ 'Email each captured lead to a human as it arrives. Every lead is also stored under Downtoll → Submissions.'|t('downtoll') }}</p>
     <div class="flex" style="margin:24px 0;">
     <div style="flex:1 1 0; padding:0 10px 0 0;">
     {{ forms.lightswitchField({
@@ -93,6 +96,7 @@
     }) }}
     </div>
     </div>
+    {% endif %}
 
     <hr>
 

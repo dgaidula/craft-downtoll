@@ -28,8 +28,9 @@ does not run on Craft 4.
 
 ## Editions
 
-Downtoll ships two editions. The line is **works standalone** vs **integrates with
-your systems** — the free edition is a complete product, not a trial.
+Downtoll ships two editions. The line is **captured and stored** vs **delivered**:
+Lite gates the file and keeps every lead in the control panel; Pro gets leads *out* — by
+email, by webhook, or through your own CRM/ESP listener.
 
 | | Lite (free) | Pro |
 | --- | :---: | :---: |
@@ -37,7 +38,8 @@ your systems** — the free edition is a complete product, not a trial.
 | `render()` embedded form | ✅ | ✅ |
 | Server-side reCAPTCHA v3 | ✅ | ✅ |
 | Signed download / session unlock | ✅ | ✅ |
-| **Lead notification emails** | ✅ | ✅ |
+| Leads stored in the CP (Submissions index) | ✅ | ✅ |
+| **Lead notification emails** | — | ✅ |
 | Newsletter opt-in checkbox | single | **multi-list** |
 | **Defaults for new gated pages** | — | ✅ |
 | `triggersHook` routing modifiers | — | ✅ |
@@ -48,7 +50,8 @@ your systems** — the free edition is a complete product, not a trial.
 
 Lite keeps the district **text input** (it still submits as `School District Input`);
 only the typeahead endpoint is Pro. On Lite the event never fires, so no listener —
-including the shipped webhook — runs; leads reach you by email instead.
+including the shipped webhook — runs, and no notification email is sent; leads wait for
+you under **Downtoll → Submissions**.
 
 ## Configuration (two layers, by design)
 
@@ -90,15 +93,16 @@ Saved and existing pages are never affected — the defaults only seed empty fie
 An asset is never defaulted (`assetId` is always null). On Lite, defaults are hidden
 and fresh fields retain the standard hardcoded defaults (affiliation on, newsletter off).
 
-### Lead notifications
+### Lead notifications <sup>PRO</sup>
 
 **Settings → General → Lead notifications.** Turn it on, give it recipients
 (comma-separated; literal addresses or an `$ENV_VAR`, resolved server-side), and every
 captured lead is emailed to a human. `{download}` and `{site}` are available in the
 subject. Reply-To is set to the lead, so hitting reply reaches the person.
 
-This is what makes Lite a complete product: without it — and without a Pro listener —
-a submission is validated, gated, served, and then gone.
+On Lite nothing is emailed — every lead is stored under **Downtoll → Submissions**, and
+this settings section is informational. Notification settings saved on Pro survive a
+move to Lite and back, so re-upgrading resumes sending with no reconfiguration.
 
 The email is plain text, and overridable: copy the plugin's
 `_mail/notification.twig` to `downtoll/_mail/notification.twig` in your own

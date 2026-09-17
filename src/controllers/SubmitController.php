@@ -75,7 +75,7 @@ class SubmitController extends Controller
         // 7. Notify a human. Deliberately AFTER access is granted and never able to
         //    fail the request: the visitor has already earned the download, so a bad
         //    SMTP config must not cost them the file. Notifications::send() swallows
-        //    and logs its own errors; this is available in Lite AND Pro.
+        //    and logs its own errors, and no-ops on Lite (PRO — the lead is still stored above).
         Plugin::getInstance()->notifications->send($event);
 
         // 8. Respond per the editor's per-resource UX choice.

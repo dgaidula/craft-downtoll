@@ -10,11 +10,11 @@ use dgaidula\downtoll\events\SubmissionEvent;
 use dgaidula\downtoll\Plugin;
 
 /**
- * Emails each captured lead to a human.
+ * Emails each captured lead to a human. PRO.
  *
- * This is what makes the free edition a complete product rather than a demo: without
- * it, and without a Pro integration listener, a submission would be validated, gated,
- * served — and then vanish. Available in BOTH editions on purpose.
+ * Lite captures the lead and stores it in the CP index (Submissions::store(), both
+ * editions); Pro is how a lead gets OUT of the control panel — this email, the webhook,
+ * the after-submission event. The edition line is "stored" vs. "delivered".
  *
  * Every failure here is swallowed (logged, never thrown). The visitor filled in the
  * form and is owed their download; a broken SMTP config is the site's problem, not
@@ -24,6 +24,12 @@ class Notifications extends Component
 {
     public function send(SubmissionEvent $event): bool
     {
+        // PRO. Lite leaves any saved notify* settings untouched but never sends, so
+        // upgrading turns an already-configured notification straight back on.
+        if (!Plugin::getInstance()->isPro()) {
+            return false;
+        }
+
         $settings = Plugin::getInstance()->getSettings();
 
         if (!$settings->notifyEnabled) {

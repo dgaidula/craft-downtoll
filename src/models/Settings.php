@@ -73,9 +73,8 @@ class Settings extends Model
     // --- Notifications ---
 
     /**
-     * Email each captured lead to a human. This is the LITE path to "the lead reached
-     * someone": without it (and without a Pro integration listener) a submission would
-     * vanish the moment the download was served.
+     * PRO. Email each captured lead to a human. On Lite the lead is stored in the CP
+     * index and this setting is ignored ({@see \dgaidula\downtoll\services\Notifications::send()}).
      */
     public bool $notifyEnabled = false;
 

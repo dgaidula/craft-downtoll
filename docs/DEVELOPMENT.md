@@ -66,7 +66,7 @@ service components:
 | `submissions` | `services\Submissions` | The submission lifecycle: config enrichment, payload normalization, the `EVENT_AFTER_SUBMISSION` event, signed config/download tokens, the session access gate, element storage, retention purge. |
 | `formConfig` | `services\FormConfig` | Reads/writes the plugin-owned form catalog (affiliation options + newsletter lists) in `{{%downtoll_config}}`. |
 | `webhook` | `services\WebhookIntegration` | The shipped generic listener: POSTs each lead to a configurable URL, optionally HMAC-signed. |
-| `notifications` | `services\Notifications` | Emails each captured lead to a human (both editions). |
+| `notifications` | `services\Notifications` | Emails each captured lead to a human (Pro; a no-op on Lite). |
 
 `Plugin::init()` then registers, via Yii events:
 
