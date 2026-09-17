@@ -1,6 +1,6 @@
 <?php
 
-namespace dgaidula\downtoll\migrations;
+namespace iceboxind\downtoll\migrations;
 
 use craft\db\Migration;
 
@@ -67,7 +67,7 @@ class Install extends Migration
     {
         // Remove the submission elements' base rows first (cascades to the
         // sub-table via the FK), then drop the plugin tables.
-        $this->delete('{{%elements}}', ['type' => 'dgaidula\\downtoll\\elements\\Submission']);
+        $this->delete('{{%elements}}', ['type' => 'iceboxind\\downtoll\\elements\\Submission']);
         $this->dropTableIfExists(self::SUBMISSIONS_TABLE);
         $this->dropTableIfExists(self::CONFIG_TABLE);
         return true;

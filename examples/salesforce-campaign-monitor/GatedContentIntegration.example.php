@@ -8,8 +8,8 @@ use craft\mail\Message;
 use CS_REST_Subscribers;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use dgaidula\downtoll\events\SubmissionEvent;
-use dgaidula\downtoll\services\Submissions;
+use iceboxind\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\services\Submissions;
 use yii\base\Event;
 use yii\base\Module;
 

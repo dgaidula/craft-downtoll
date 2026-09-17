@@ -1,6 +1,6 @@
 <?php
 
-namespace dgaidula\downtoll\models;
+namespace iceboxind\downtoll\models;
 
 use craft\base\Model;
 
@@ -8,7 +8,7 @@ use craft\base\Model;
  * Per-resource form configuration.
  *
  * The per-entry fields (resourceId, assetId, successMode, include* flags,
- * newsletterListIds) come from the {@see \dgaidula\downtoll\fields\GatedContent}
+ * newsletterListIds) come from the {@see \iceboxind\downtoll\fields\GatedContent}
  * field value (content). The catalog fields (affiliationOptions,
  * triggerValues, newsletterLists, newsletterHeading) are enriched from
  * {@see FormConfig} at render time. A trimmed, signed subset is round-tripped as
@@ -82,7 +82,7 @@ class ResourceConfig extends Model
      * Decode a stored/posted field-value array into an (un-enriched) ResourceConfig.
      *
      * This is the single source of truth for the array → config mapping, shared by
-     * {@see \dgaidula\downtoll\fields\GatedContent::normalizeValue()} (per-entry
+     * {@see \iceboxind\downtoll\fields\GatedContent::normalizeValue()} (per-entry
      * content) and the plugin Settings "defaults" editor (Pro). It does NOT enrich
      * from the live element or the FormConfig catalog — callers that need that
      * (i.e. the field) do it afterwards.

@@ -1,5 +1,5 @@
 {
-  "name": "dgaidula/craft-downtoll",
+  "name": "iceboxind/craft-downtoll",
   "description": "Gated downloads and lead capture for Craft CMS.",
   "type": "craft-plugin",
   "keywords": ["craft", "craft-cms", "craft-plugin", "gated-content", "lead-capture", "downloads"],
@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "dgaidula\\downtoll\\": "src/"
+      "iceboxind\\downtoll\\": "src/"
     }
   },
   "extra": {
@@ -36,6 +36,6 @@
     "developer": "Danniel T. Gaidula",
     "developerUrl": "https://gaidula.com",
     "documentationUrl": "https://github.com/dgaidula/craft-downtoll/blob/main/README.md",
-    "class": "dgaidula\\downtoll\\Plugin"
+    "class": "iceboxind\\downtoll\\Plugin"
   }
 }

@@ -214,8 +214,8 @@ Subscribe to the submission event from your own module/plugin:
 ```php
 use yii\base\Event;
 use craft\helpers\App;
-use dgaidula\downtoll\services\Submissions;
-use dgaidula\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\services\Submissions;
+use iceboxind\downtoll\events\SubmissionEvent;
 
 Event::on(Submissions::class, Submissions::EVENT_AFTER_SUBMISSION, function (SubmissionEvent $e) {
     // $e->fields          Title-Case payload; $e->fields['Newsletter Lists'] = checked list IDs

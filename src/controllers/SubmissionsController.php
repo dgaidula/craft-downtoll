@@ -1,9 +1,9 @@
 <?php
 
-namespace dgaidula\downtoll\controllers;
+namespace iceboxind\downtoll\controllers;
 
 use craft\web\Controller;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\Plugin;
 use yii\web\Response;
 
 /**

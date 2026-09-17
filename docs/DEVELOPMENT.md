@@ -215,8 +215,8 @@ Register in a Craft module’s `init()` and bootstrap the module in
 
 ```php
 use yii\base\Event;
-use dgaidula\downtoll\services\Submissions;
-use dgaidula\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\services\Submissions;
+use iceboxind\downtoll\events\SubmissionEvent;
 
 Event::on(Submissions::class, Submissions::EVENT_AFTER_SUBMISSION, function (SubmissionEvent $e) {
     $checked    = (array) ($e->fields['Newsletter Lists'] ?? []);
@@ -390,7 +390,7 @@ live immediately:
 Then, from the host site:
 
 ```bash
-composer require dgaidula/craft-downtoll:@dev
+composer require iceboxind/craft-downtoll:@dev
 php craft plugin/install downtoll
 php craft up            # applies any pending plugin migrations
 ```
@@ -411,14 +411,16 @@ The dev loop from there:
 under `src/migrations/` (`php craft migrate/create <name> --plugin=downtoll`
 scaffolds one), mirror the change in `Install.php` for fresh installs, and keep
 the migration idempotent — the existing `m260716_120000_downtoll_submissions` is
-the template to follow. Craft prompts for (or `php craft up` applies) pending
+the template to follow. (`m260917_120000_rename_vendor_namespace` is the template for
+the other kind: a class that Craft persists outside the code — a field type in project
+config, an element type in `{{%elements}}.type` — was renamed or moved.) Craft prompts for (or `php craft up` applies) pending
 plugin migrations whenever the recorded schema version is behind.
 
 ## Coding standards and layout
 
 - **PHP** ≥ 8.2, **Craft** ^5.0 — the only runtime requirements; the plugin core
   has no CRM/ESP or host-site coupling.
-- **PSR-4** — everything under `src/` maps to the `dgaidula\downtoll\` namespace.
+- **PSR-4** — everything under `src/` maps to the `iceboxind\downtoll\` namespace.
 - **Code style** — `php-cs-fixer` (via the dev-only shim), configured in
   `.php-cs-fixer.dist.php`:
 
@@ -460,7 +462,8 @@ src/
 │   └── GatedContent.php           # The per-entry gating field
 ├── migrations/
 │   ├── Install.php                # Both plugin tables
-│   └── m260716_120000_downtoll_submissions.php
+│   ├── m260716_120000_downtoll_submissions.php
+│   └── m260917_120000_rename_vendor_namespace.php   # dgaidula\ → iceboxind\ for stored class names
 ├── models/
 │   ├── ResourceConfig.php         # Per-resource form model + signed-token subset
 │   └── Settings.php               # Global settings (project config)

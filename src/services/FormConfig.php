@@ -1,13 +1,13 @@
 <?php
 
-namespace dgaidula\downtoll\services;
+namespace iceboxind\downtoll\services;
 
 use Craft;
 use craft\base\Component;
 use craft\db\Query;
 use craft\helpers\Db;
 use craft\helpers\Json;
-use dgaidula\downtoll\migrations\Install;
+use iceboxind\downtoll\migrations\Install;
 
 /**
  * Reads/writes the plugin-owned form configuration (affiliation options +

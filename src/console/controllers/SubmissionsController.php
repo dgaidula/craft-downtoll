@@ -1,9 +1,9 @@
 <?php
 
-namespace dgaidula\downtoll\console\controllers;
+namespace iceboxind\downtoll\console\controllers;
 
 use craft\console\Controller;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\Plugin;
 use yii\console\ExitCode;
 
 /**

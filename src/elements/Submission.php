@@ -1,14 +1,14 @@
 <?php
 
-namespace dgaidula\downtoll\elements;
+namespace iceboxind\downtoll\elements;
 
 use Craft;
 use craft\base\Element;
 use craft\helpers\Db;
 use craft\helpers\Html;
 use craft\helpers\Json;
-use dgaidula\downtoll\elements\db\SubmissionQuery;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\elements\db\SubmissionQuery;
+use iceboxind\downtoll\Plugin;
 
 /**
  * A captured gated-form lead, stored as a native element so the CP gets

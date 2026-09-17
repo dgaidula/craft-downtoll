@@ -1,16 +1,16 @@
 <?php
 
-namespace dgaidula\downtoll\services;
+namespace iceboxind\downtoll\services;
 
 use Craft;
 use craft\base\Component;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
-use dgaidula\downtoll\elements\Submission;
-use dgaidula\downtoll\events\SubmissionEvent;
-use dgaidula\downtoll\models\ResourceConfig;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\elements\Submission;
+use iceboxind\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\models\ResourceConfig;
+use iceboxind\downtoll\Plugin;
 
 /**
  * Owns the submission lifecycle: ResourceConfig enrichment, payload

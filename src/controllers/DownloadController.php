@@ -1,16 +1,16 @@
 <?php
 
-namespace dgaidula\downtoll\controllers;
+namespace iceboxind\downtoll\controllers;
 
 use Craft;
 use craft\web\Controller;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\Plugin;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
  * Serves a gated asset, but only via a short-lived signed token issued by
- * {@see \dgaidula\downtoll\services\Submissions::signedDownloadUrl()} after
+ * {@see \iceboxind\downtoll\services\Submissions::signedDownloadUrl()} after
  * a successful submission. The token both authorizes the download and pins it
  * to a single asset, so the public asset URL is never exposed directly.
  */

@@ -1,12 +1,12 @@
 <?php
 
-namespace dgaidula\downtoll\elements\db;
+namespace iceboxind\downtoll\elements\db;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 
 /**
- * Element query for {@see \dgaidula\downtoll\elements\Submission}.
+ * Element query for {@see \iceboxind\downtoll\elements\Submission}.
  *
  * Joins the {{%downtoll_submissions}} sub-table and exposes the lead columns,
  * with fluent filters for the commonly-queried ones.

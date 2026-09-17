@@ -1,12 +1,12 @@
 <?php
 
-namespace dgaidula\downtoll\controllers;
+namespace iceboxind\downtoll\controllers;
 
 use Craft;
 use craft\elements\Asset;
 use craft\web\Controller;
-use dgaidula\downtoll\models\ResourceConfig;
-use dgaidula\downtoll\web\assets\form\FormAsset;
+use iceboxind\downtoll\models\ResourceConfig;
+use iceboxind\downtoll\web\assets\form\FormAsset;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 

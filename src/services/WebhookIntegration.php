@@ -1,13 +1,13 @@
 <?php
 
-namespace dgaidula\downtoll\services;
+namespace iceboxind\downtoll\services;
 
 use Craft;
 use craft\base\Component;
 use craft\helpers\App;
 use craft\helpers\Json;
-use dgaidula\downtoll\events\SubmissionEvent;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\Plugin;
 
 /**
  * The shipped, integration-agnostic listener: on a successful submission it

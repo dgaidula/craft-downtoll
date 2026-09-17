@@ -1,13 +1,13 @@
 <?php
 
-namespace dgaidula\downtoll\fields;
+namespace iceboxind\downtoll\fields;
 
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\helpers\Json;
-use dgaidula\downtoll\models\ResourceConfig;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\models\ResourceConfig;
+use iceboxind\downtoll\Plugin;
 
 /**
  * The "Gated Content" field. A dev adds it to any gateable entry type once

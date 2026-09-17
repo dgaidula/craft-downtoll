@@ -11,10 +11,23 @@
   settings are left untouched on Lite, so upgrading resumes sending with no
   reconfiguration.
 
-### Upgrade note
+- **Composer vendor and PHP namespace are now `iceboxind`.** The package is
+  `iceboxind/craft-downtoll` and every class lives under `iceboxind\downtoll\`, matching
+  the rest of the Icebox Industries plugin family. The GitHub repository has **not**
+  moved — it stays at `github.com/dgaidula/craft-downtoll`. The handle (`downtoll`),
+  the Twig variable (`craft.downtoll.*`), settings, and license keys are unaffected.
+
+### Upgrade notes
 - An existing install running the **Lite** edition with notifications switched on stops
   receiving lead emails after this update. Set the edition to Pro first
   (`php craft project-config/set plugins.downtoll.edition pro`).
+- **Sites installed under the old package name:** in the site's `composer.json`, change
+  the `require` key from `dgaidula/craft-downtoll` to `iceboxind/craft-downtoll`, run
+  `composer update`, then `php craft up`. Schema version → `1.2.0`; migration
+  `m260917_120000_rename_vendor_namespace` rewrites the two class names Craft stores
+  outside the code — the Submission element type on existing lead rows, and the Gated
+  Content field type in project config — so no lead or field is orphaned. Custom code
+  that listens to Downtoll's events must update its `use dgaidula\downtoll\…` imports.
 
 ## 1.2.0 - 2026-07-21
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace dgaidula\downtoll\models;
+namespace iceboxind\downtoll\models;
 
 use craft\base\Model;
 
@@ -56,7 +56,7 @@ class Settings extends Model
      * PRO. The full default {@see ResourceConfig} state a BRAND-NEW (never-saved)
      * Gated Content field initializes from, so an editor only has to pick the asset
      * on a fresh page. Stored as the same serialized shape
-     * {@see \dgaidula\downtoll\fields\GatedContent::serializeValue()} produces
+     * {@see \iceboxind\downtoll\fields\GatedContent::serializeValue()} produces
      * (successMode, includeAffiliation, includeNewsletter, newsletterListIds,
      * requiredFields, cssClass, newsletterHeading, successMessage, errorMessage) —
      * EXCEPT an asset is never defaulted (`assetId` is always forced to null).
@@ -74,7 +74,7 @@ class Settings extends Model
 
     /**
      * PRO. Email each captured lead to a human. On Lite the lead is stored in the CP
-     * index and this setting is ignored ({@see \dgaidula\downtoll\services\Notifications::send()}).
+     * index and this setting is ignored ({@see \iceboxind\downtoll\services\Notifications::send()}).
      */
     public bool $notifyEnabled = false;
 

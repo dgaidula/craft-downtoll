@@ -1,13 +1,13 @@
 <?php
 
-namespace dgaidula\downtoll\services;
+namespace iceboxind\downtoll\services;
 
 use Craft;
 use craft\base\Component;
 use craft\helpers\App;
 use craft\mail\Message;
-use dgaidula\downtoll\events\SubmissionEvent;
-use dgaidula\downtoll\Plugin;
+use iceboxind\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\Plugin;
 
 /**
  * Emails each captured lead to a human. PRO.

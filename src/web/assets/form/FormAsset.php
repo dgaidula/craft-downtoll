@@ -1,6 +1,6 @@
 <?php
 
-namespace dgaidula\downtoll\web\assets\form;
+namespace iceboxind\downtoll\web\assets\form;
 
 use craft\web\AssetBundle;
 
@@ -9,7 +9,7 @@ use craft\web\AssetBundle;
  * the JSON submit round-trip, inline errors, swap/reload success, and the
  * affiliation → district toggle.
  *
- * Registered by {@see \dgaidula\downtoll\web\twig\DowntollVariable::render()},
+ * Registered by {@see \iceboxind\downtoll\web\twig\DowntollVariable::render()},
  * so ONLY the turnkey `render()` path pulls it in — headless `data()` users
  * bring their own front end. Plain ES, no build step.
  */

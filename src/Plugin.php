@@ -1,6 +1,6 @@
 <?php
 
-namespace dgaidula\downtoll;
+namespace iceboxind\downtoll;
 
 use Craft;
 use craft\base\Model;
@@ -16,15 +16,15 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
-use dgaidula\downtoll\elements\Submission;
-use dgaidula\downtoll\fields\GatedContent as GatedContentField;
-use dgaidula\downtoll\models\ResourceConfig;
-use dgaidula\downtoll\models\Settings;
-use dgaidula\downtoll\services\FormConfig;
-use dgaidula\downtoll\services\Notifications;
-use dgaidula\downtoll\services\Submissions;
-use dgaidula\downtoll\services\WebhookIntegration;
-use dgaidula\downtoll\web\twig\DowntollVariable;
+use iceboxind\downtoll\elements\Submission;
+use iceboxind\downtoll\fields\GatedContent as GatedContentField;
+use iceboxind\downtoll\models\ResourceConfig;
+use iceboxind\downtoll\models\Settings;
+use iceboxind\downtoll\services\FormConfig;
+use iceboxind\downtoll\services\Notifications;
+use iceboxind\downtoll\services\Submissions;
+use iceboxind\downtoll\services\WebhookIntegration;
+use iceboxind\downtoll\web\twig\DowntollVariable;
 use yii\base\Event;
 
 /**
@@ -43,7 +43,7 @@ use yii\base\Event;
  */
 class Plugin extends BasePlugin
 {
-    public string $schemaVersion = '1.1.0';
+    public string $schemaVersion = '1.2.0';
     public bool $hasCpSettings = true;
     public bool $hasCpSection = true;
 

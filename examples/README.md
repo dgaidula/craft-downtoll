@@ -43,8 +43,8 @@ The smallest thing that works:
 
 ```php
 use yii\base\Event;
-use dgaidula\downtoll\services\Submissions;
-use dgaidula\downtoll\events\SubmissionEvent;
+use iceboxind\downtoll\services\Submissions;
+use iceboxind\downtoll\events\SubmissionEvent;
 
 Event::on(Submissions::class, Submissions::EVENT_AFTER_SUBMISSION, function (SubmissionEvent $e) {
     Craft::info(sprintf(

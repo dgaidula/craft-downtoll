@@ -1,14 +1,14 @@
 <?php
 
-namespace dgaidula\downtoll\events;
+namespace iceboxind\downtoll\events;
 
-use dgaidula\downtoll\models\ResourceConfig;
+use iceboxind\downtoll\models\ResourceConfig;
 use yii\base\Event;
 
 /**
  * Fired by Submissions after a submission passes validation + reCAPTCHA.
  *
- * Listeners — the shipped {@see \dgaidula\downtoll\services\WebhookIntegration},
+ * Listeners — the shipped {@see \iceboxind\downtoll\services\WebhookIntegration},
  * or a site-side CRM listener — read $fields, may set $contactId, and may flip
  * $isValid to false to abort gating on a hard integration failure.
  */
