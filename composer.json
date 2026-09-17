@@ -5,7 +5,7 @@
   "keywords": ["craft", "craft-cms", "craft-plugin", "gated-content", "lead-capture", "downloads"],
   "license": "proprietary",
   "support": {
-    "email": "dan@gaidula.com",
+    "email": "support@iceboxind.com",
     "issues": "https://github.com/dgaidula/craft-downtoll/issues",
     "source": "https://github.com/dgaidula/craft-downtoll",
     "docs": "https://github.com/dgaidula/craft-downtoll/blob/main/README.md"
@@ -34,7 +34,7 @@
       "pro"
     ],
     "developer": "Danniel T. Gaidula",
-    "developerUrl": "https://gaidula.com",
+    "developerUrl": "https://iceboxind.com",
     "documentationUrl": "https://github.com/dgaidula/craft-downtoll/blob/main/README.md",
     "class": "iceboxind\\downtoll\\Plugin"
   }
