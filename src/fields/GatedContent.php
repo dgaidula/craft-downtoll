@@ -15,8 +15,8 @@ use iceboxind\downtoll\Plugin;
  * newsletter list, success mode — as content, editable on production.
  *
  * The normalized value is a {@see ResourceConfig} enriched from {@see FormConfig}
- * (affiliation catalog) so templates can render directly:
- *   {{ entry.myGatedField | raw }}   (or)   {{ craft.downtoll.render(entry.myGatedField) }}
+ * (affiliation catalog) so templates can render it directly:
+ *   {{ craft.downtoll.render(entry.myGatedField) }}
  */
 class GatedContent extends Field
 {
