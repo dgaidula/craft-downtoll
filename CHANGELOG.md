@@ -26,7 +26,8 @@
   `composer update`, then `php craft up`. Schema version → `1.2.0`; migration
   `m260917_120000_rename_vendor_namespace` rewrites the two class names Craft stores
   outside the code — the Submission element type on existing lead rows, and the Gated
-  Content field type in project config — so no lead or field is orphaned. Custom code
+  Content field type in project config — so no lead or field is orphaned; a customised
+  Submissions index keeps its sources and columns. Custom code
   that listens to Downtoll's events must update its `use dgaidula\downtoll\…` imports.
 
 ## 1.2.0 - 2026-07-21

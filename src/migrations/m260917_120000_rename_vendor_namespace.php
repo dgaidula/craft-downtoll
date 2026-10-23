@@ -15,12 +15,17 @@ use iceboxind\downtoll\fields\GatedContent;
  * not move). Two class names live OUTSIDE the code and have to follow, or an
  * already-installed site is left with a "missing" field type and orphaned leads:
  *
- *  - the Submission element type, stored per row in {{%elements}}.type (and in
- *    any saved element-index settings) — content, so always rewritten;
+ *  - the Submission element type, stored per row in {{%elements}}.type —
+ *    content, so always rewritten;
  *  - the Gated Content field type, stored in project config at fields.<uid>.type
  *    — rewritten only when this environment's config is still behind, the
  *    standard guard so a deploy that already carries the updated YAML isn't
  *    fought by its own migration.
+ *
+ * A customised Submissions index (sources, columns) is project config too, at
+ * elementSources.<element type class> since Craft 4.0 dropped the
+ * {{%elementindexsettings}} table; it moves to the new class name under the
+ * same guard.
  *
  * Idempotent: on a fresh install, or a site that never ran under the old
  * namespace, every statement matches nothing.
@@ -33,7 +38,6 @@ class m260917_120000_rename_vendor_namespace extends Migration
     public function safeUp(): bool
     {
         $this->update('{{%elements}}', ['type' => Submission::class], ['type' => self::OLD_ELEMENT_TYPE], [], false);
-        $this->update('{{%elementindexsettings}}', ['type' => Submission::class], ['type' => self::OLD_ELEMENT_TYPE], [], false);
 
         $projectConfig = Craft::$app->getProjectConfig();
         $schemaVersion = (string) $projectConfig->get('plugins.downtoll.schemaVersion', true);
@@ -43,6 +47,18 @@ class m260917_120000_rename_vendor_namespace extends Migration
                 if (($field['type'] ?? null) === self::OLD_FIELD_TYPE) {
                     $projectConfig->set("fields.$uid.type", GatedContent::class, 'Downtoll: vendor namespace moved to iceboxind');
                 }
+            }
+
+            // Custom sources carry the class again in their condition config.
+            $sources = $projectConfig->get('elementSources.' . self::OLD_ELEMENT_TYPE);
+            if ($sources !== null && $projectConfig->get('elementSources.' . Submission::class) === null) {
+                array_walk_recursive($sources, function (&$value) {
+                    if ($value === self::OLD_ELEMENT_TYPE) {
+                        $value = Submission::class;
+                    }
+                });
+                $projectConfig->set('elementSources.' . Submission::class, $sources, 'Downtoll: vendor namespace moved to iceboxind');
+                $projectConfig->remove('elementSources.' . self::OLD_ELEMENT_TYPE, 'Downtoll: vendor namespace moved to iceboxind');
             }
         }
 
