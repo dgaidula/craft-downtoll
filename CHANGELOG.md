@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 - 2026-11-02
 
 ### Changed
 - **Lead notification emails are now a Pro feature.** Lite still gates the file, captures
